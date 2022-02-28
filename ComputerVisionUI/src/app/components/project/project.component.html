@@ -1,0 +1,496 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+  <div class="gear"></div>
+</div>
+<!--loader end-->
+
+
+<!--********************Project list start*****************-->
+<div *ngIf="allprojects.length>0 && !projectSelected">
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="two alt-two cchange">
+        <h1 class="heading">
+          <span><i class="fa fa-list"></i> My Projects </span>
+        </h1>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card border-0">
+        <div class="row pl-3 pr-2">
+          <div class="col-md-3">
+            <div class="input-group ">
+              <input class="form-control border-right-0 border mt-2 " type="search" placeholder="search"
+                id="example-search-input">
+              <span class="input-group-append">
+                <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-9 ">
+            <button type="button" class="btn1 btn4" (click)="launchProjectCreate();"><span><i
+                  class="fa fa-plus-circle"></i> Create New</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row text-center">
+        <!-- Team item -->
+        <div *ngFor="let project of allprojects" class="col-xl-3 col-sm-6 mb-5"
+          >
+          <div class="bg-white rounded shadow-sm py-5 px-4">
+            <img src="../../../assets/images/common/project_detail.png"
+              alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+            <h5 class="mb-0">{{project.Name | slice:0:15}}{{project.Name.length > 15 ? '...' : ''}}</h5><span
+              class="small text-uppercase text-muted">Project Type: {{getProjectType(project.Type)}}</span>
+            <div class="row text-center">  
+            <button type="button" class="btn1 bt" (click)="loadSelectedProject(project)"><span><i class="fa "></i>Get
+                Detail</span></button>
+            <button type="button" (click)="deleteProject($event,project.Id)" class="btn1 bt">
+                  <span><i class="fa fa-trash"></i> Delete</span>
+            </button>
+            </div>
+          </div>
+        </div><!-- End -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--********************Project list end*****************-->
+<div *ngIf="projectSelected||allprojects.length==0">
+
+  <div *ngIf="projectCreated; then projectStepsTemplate else projectCreationTemplate"></div>
+
+  <!-- Screeen one starts  -->
+  <ng-template #projectCreationTemplate>
+
+    <!-- form design start-->
+    <div class="card mb-3">
+      <!--<div class="card-header"><i class="fa fa-table"></i> Data Table Example</div>-->
+      <div class="card-header">
+        <div class="two alt-two cchange">
+          <h1 class="heading">
+            <span><i class="fa fa-wpforms"></i>{{projectLoadOrCreate}}</span>
+          </h1>
+        </div>
+      </div>
+      <div class="card-body ">
+        <form id="projectcreat" class="pt-4" #projectCreation="ngForm"
+          (ngSubmit)="createProject(projectCreation.value)">
+          <div class="form-row justify-content-center ">
+            <div class="form-group col-md-8">
+              <label for="inputName4">Name</label>
+              <input type="hidden" name="projectId" [(ngModel)]="project.Id">
+              <input type="text" class="form-control" id="inputName4" name="projectName" placeholder="Name"
+                [(ngModel)]="project.Name">
+            </div>
+          </div>
+          <div class="form-row justify-content-center ">
+            <div class="form-group col-md-8">
+              <label for="inputDescription4">Description</label>
+              <input type="text" class="form-control" id="inputDescription4" placeholder="Description"
+                name="projectDesc" [(ngModel)]="project.Description">
+            </div>
+          </div>
+          <div class="form-row justify-content-center ">
+            <div class="form-group col-md-8">
+              <label for="resourceInput" class="required">Resource</label>
+              <select id="resourceInput" class="form-control" required="true" name="resourceType"
+                [(ngModel)]="project.Resource">
+                <option value="-1" disabled selected hidden>Select Resource Type</option>
+                <option value="{{resource.id}}" *ngFor="let resource of allResources">{{resource.Name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-8">
+              <label for="projectInput" class="required">Type</label>
+              <select id="projectInput" required="true" class="form-control" name="projectType"
+                [(ngModel)]="project.Type">
+                <option value="-1" disabled selected hidden>Select Project Type</option>
+                <option value="{{projType.id}}" *ngFor="let projType of projectTypes">{{projType.Name}}</option>
+              </select>
+            </div>
+          </div>
+          <div [hidden]="true" class="form-row justify-content-center ">
+            <div class="form-group col-md-8">
+              <label for="exportOptInput" class="required">Export Option</label>
+              <select id="exportOptInput" class="form-control" required="true" name="exportOption"
+                [(ngModel)]="project.Export">
+                <option value="-1" disabled selected hidden>Select Export Option</option>
+                <option value="{{export.id}}" *ngFor="let export of exportOptions">{{export.Name}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <div class="col-md-12 text-center">
+          <button type="submit" form="ngForm" (click)="projectCreation.ngSubmit.emit()" class="btn1"><span><i
+                class="fa fa-save"></i> Save</span></button>
+          <button type="button" class="btn2" (click)="projectSelected=false;"><span><i class="fa fa-times"></i>
+              Cancel</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screeen one ends  -->
+  </ng-template>
+
+  <!-- Screeen two starts  -->
+  <ng-template #projectStepsTemplate>
+
+    <div class="card" id="imageupload">
+      <div class="card-header">
+        <div class="two alt-two cchange">
+          <h1 class="heading">
+            <span> Project Detail </span>
+          </h1>
+        </div>
+      </div>
+      <div class="card-body pl-0 pb-0">
+        <!--step code start-->
+        <div class="nl-process">
+          <div class="complete-hint"><i class="fa fa-check"></i></div>
+          <ul class="process-list">
+            <li class="process-item is-current">
+              <div class="process-content">
+                <div class="process-active-bar"></div>
+                <div class="circle">
+                  <span></span>
+                </div>
+                <div class="des">
+                  <span>Training</span>
+                </div>
+              </div>
+            </li>
+            <li class="process-item">
+              <div class="process-content">
+                <div class="process-active-bar"></div>
+                <div class="circle">
+                  <span></span>
+                </div>
+                <div class="des">
+                  <span>Prediction</span>
+                </div>
+              </div>
+            </li>
+            <!-- <li class="process-item ">
+              <div class="process-content">
+                <div class="process-active-bar"></div>
+                <div class="circle">
+                  <span></span>
+                </div>
+                <div class="des">
+                  <span>Predictions </span>
+                </div>
+              </div>
+            </li> -->
+          </ul>
+        </div>
+        <!--step code end-->
+
+        <!-- Step 1 tab  -->
+        <div class="row">
+          <div *ngIf="activeStep==1" class="col-md-12  text-center">
+            <div *ngIf="fileListTrain.length==0" class="file-upload pt-0">
+              <div ngClass="{{dragAreaClass}}">
+                <input class="file-upload-input" type='file' accept="image/*" #file [multiple]="true"
+                  (change)="onFileChange($event)" />
+                <div class="drag-text">
+                  <h3>Drag and drop a file or select add Image / Video Files</h3>
+                </div>
+              </div>
+              <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add
+                Image</button>
+            </div>
+            <!--conditional render only if the images are uploaded -->
+            <div *ngIf="fileListTrain.length>0" class="card ">
+              <div class="card-body">
+                <div class="cont-main">
+                  <div *ngFor="let file of fileListTrain" class="cont-checkbox" style="display:block ; ">
+                    <input type="checkbox" id="myCheckbox-{{file.no}}" class="chekimg" />
+                    <label for="myCheckbox-{{file.no}}" class="imgchek">
+                      <img class="{{file.class}} imgchek" (click)="selectTrainingImage(file.no)" src="{{file.path}}"
+                        alt="your image" />
+                      <span class="cover-checkbox">
+                        <svg viewBox="2 1 13 12">
+                          <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </svg>
+                      </span>
+                    </label>
+                  </div>
+
+                  <!--<div class="file-upload-content" style="display:block">
+                    <img *ngFor="let file of fileListTrain" class="{{file.class}}" (click)="selectTrainingImage(file.no)" src="{{file.path}}" alt="your image" />
+                    <div class="image-title-wrap">                    
+                      <button type="button" (click)="removeUpload()" class="remove-image btn2"><i class="fa "></i> Train </button>
+                    </div>
+                  </div>-->
+                </div>
+                <div class="image-title-wrap">
+                  <button type="button" form="ngForm" (click)="startTraining()" class="btn1">
+                    <span><i class="fa fa-tasks"></i> Train</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!--<div id="tick-mark"></div>-->
+            <!--
+                *************** refrance code***************
+              <div class="cont-bg">
+                <div class="cont-title">Checkbox</div>
+                <div class="cont-main">
+                  <div class="cont-checkbox">
+                    <input type="checkbox" id="myCheckbox-1" class="chekimg"/>
+                    <label for="myCheckbox-1" class="imgchek">
+                                            <img
+                        src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2021-mazda-mx-5-miata-mmp-1-1593459650.jpg?crop=0.781xw:0.739xh;0.109xw,0.0968xh&resize=480:*"
+                      />
+                      <span class="cover-checkbox">
+                        <svg viewBox="0 0 12 10">
+                          <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </svg>
+                      </span>
+                      <div class="info">Mazda MX-5 Miata</div>
+                    </label>
+                  </div>
+                  <div class="cont-checkbox">
+                    <input type="checkbox" id="myCheckbox-2" class="chekimg" />
+                    <label for="myCheckbox-2" class="imgchek">
+                      <img
+                        src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2020-chevrolet-corvette-c8-102-1571146873.jpg?crop=0.548xw:0.411xh;0.255xw,0.321xh&resize=980:*"
+                      />
+                      <span class="cover-checkbox">
+                        <svg viewBox="0 0 12 10">
+                          <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </svg>
+                      </span>
+                      <div class="info">Toyota Supra</div>
+                    </label>
+                  </div>
+                </div>
+              
+              </div>-->
+          </div>
+        </div>
+
+        <!-- Step 2 tab  -->
+        <div class="row" id="pertab">
+          <div *ngIf="activeStep==3" #performanceTab class="col-md-12 ">
+            <div class="card-body pt-0">
+              <div class="row text-center justify-content-center">
+                <div class="col-md-5">
+                  <!-- <select id="exportOptInput" class="form-control" required="true" (change)="selectIteration($event)"
+                    name="exportOption" ngModel>
+                    <option value="" disabled selected hidden>Select Iteration to continue..</option>
+                    <option *ngFor="let iter of iterations" value="{{iter.id}}">{{iter.name}}</option>
+                  </select> -->
+                </div>
+              </div>
+              <!-- <div [hidden]="_iterationId==-1" class="row pt-2 pb-2 text-left justify-content-center">
+                <div class="col-md-8">
+                  <ul id="list">
+                    <div>Finished training on <strong class="ng-binding">{{iterdatetime}}</strong> -->
+              <!--using <strong class="ng-binding">{{iterdomain}}</strong> domain -->
+              <!-- </div>
+                    <div>Iteration id: <strong class="ng-binding">{{iterid}}</strong></div>
+                    <div class="ng-scope">Classification type: <strong class="ng-binding">{{iterclasstype}}</strong>
+                    </div>
+                  </ul>
+
+                </div>
+              </div>
+              <div [hidden]="_iterationId==-1" class="row pb-2 pt-2 text-center justify-content-center">
+                <div *ngFor="let perfChart of performanceCharts" class="col-12 col-md-4 col-lg-4 text-center"> -->
+              <!--<label>{{perfChart.Name}}</label>-->
+              <!-- <div class=" chart-area">
+                    <canvas id="{{perfChart.Id}}"> </canvas>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row justify-content-center text-center">
+
+                <div [hidden]="iterations.length==0" class="table-responsive col-md-8 pt-4">
+                  <table class="table table-hover" id="" width="100%" cellspacing="0">
+                    <thead class="mdb-color darken-3">
+                      <tr class="">
+                        <th>Iteration</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>A.P.</th>
+                        <!--<th>Image Count</th>-->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- <tr *ngFor="let iter of iterations" (click)="selectIteration1($event, iter)" value="{{iter.id}}"> -->
+                      <tr *ngFor="let iter of iterations" (click)="selectIteration1($event, iter)"
+                        (click)="iter.isSelected = true" [class.data-selected]="iter.isSelected" style="cursor:pointer;">
+                        <!-- [ngClass]="{'data-selected': selectedRow === iter.id}"> -->
+                        <!-- <tr *ngFor="let iter of iterations" onclick="alert(iter.name)"> -->
+                        <!-- onclick="alert('Clicked')" -->
+                        <!-- <option *ngFor="let iter of iterations" value="{{iter.id}}">{{iter.name}}</option> -->
+                        <!-- <td>{{iter.id}}</td> -->
+                        <td>{{iter.name}} </td>
+                        <td>{{iter.precision*100 | number:'1.0-0'}}%</td>
+                        <td>{{iter.recall*100 | number:'1.0-0'}}%</td>
+                        <td>{{iter.f1*100 | number:'1.0-0'}}%</td>
+                        <!-- <td>{{iter.isSelected}}</td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-md-12" style="height:25px;">
+                  <div>
+                  </div>
+                </div>
+  
+                <div *ngIf="_iterationId !=-1" class="row">
+                  <div class="col-md-12  text-center">
+                    <div *ngIf="fileListPredict.length==0" class="file-upload pt-0">
+                      <div ngClass="{{dragAreaClass}}">
+                        <input class="file-upload-input" type='file' accept="image/*" #file [multiple]="true"
+                          (change)="onFileChange($event)" />
+                        <div class="drag-text">
+                          <h3>Drag and drop a file or select add Image / Video Files</h3>
+                        </div>
+                      </div>
+                      <button class="file-upload-btn" type="button"
+                        onclick="$('.file-upload-input').trigger( 'click' )">Quick
+                        Test</button>
+                    </div>
+                    <!--conditional render only if the images are uploaded -->
+                    <div *ngIf="fileListPredict.length>0" class="card ">
+                      <div class="card-body">
+                        <div class="file-upload-content" style="display:block">
+                          <div class="d-flex flex-row cont-main">
+                            <div class="" *ngFor="let file of fileListPredict">
+                              <img class="file-upload-image" src="{{file.path}}" alt="your image" />
+                              <p style="width:100px;">{{file.tag}}</p>
+                              <p></p>
+                            </div>
+                          </div>
+                          <div class="image-title-wrap" [hidden]="true">
+                            <button type="button" (click)="removeUpload()" class="remove-image"><i
+                                class="fa fa-trash"></i>
+                              Remove </button>
+                          </div>
+                          <div class="image-title-wrap">
+                            <button type="button" form="ngForm" (click)="startInferencing()" class="btn1">
+                              <span><i class="fa "></i>Quick Test</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- </div> -->
+                  </div>
+                  <div class="card-footer col">
+                    <div class="col-md-12 text-center footer">
+                      <!-- <input class="file-upload-input-add" [hidden]="true" type='file' accept="image/*" #file [multiple]="true"
+                        (change)="onFileChange($event)" /> -->
+                      <button class="roundbtn prev is-show" (click)="onTabSelected(1)" title="Back"><i
+                          class="fa fa-hand-o-left"></i></button>
+                      <!-- <button class="roundbtn" onclick="$('.file-upload-input-add').trigger( 'click' )" title="Add"><i
+                          class="fa fa-plus"></i></button> -->
+                      <button class="roundbtn" title="Delete" (click)="deletePredFiles()"><i class="fa fa-trash"></i>
+                      </button>
+                      <!-- <button class="roundbtn" title="Select All"><i class="fa fa-check"></i></button> -->
+                      <!--<button class="roundbtn next is-show" title="Next"><i class="fa fa-hand-o-right"></i></button>-->
+                    </div>
+                  </div>
+                </div>
+  
+              </div>
+
+            </div>
+
+            <!-- <div class="col-md-12 text-center footer">
+              <button class="roundbtn prev is-show" (click)="onTabSelected(1)" title="Back"><i
+                  class="fa fa-hand-o-left"></i></button>
+              <button class="roundbtn" title="Delete Iterations" (click)="deleteAllIterations()"><i
+                  class="fa fa-trash"></i> </button>
+              <button [hidden]="_iterationId==-1" class="roundbtn next is-show" (click)="onTabSelected(3)"
+                title="Next"><i class="fa fa-hand-o-right"></i></button>
+            </div> -->
+
+          </div>
+        </div>
+
+      </div>
+      <div *ngIf="activeStep==1">
+        <div class="card-footer">
+          <div class="col-md-12 text-center footer" style="display: none;">
+            <button class="footer-btn  prev is-show"><i class="fa fa-hand-o-left"></i> Back</button>
+            <button class="footer-btn next is-show"> Next <i class="fa fa-hand-o-right"></i></button>
+            <button class="footer-btn finished is-hide">Complete</button>
+          </div>
+          <div class="col-md-12 text-center footer" style="display: none;">
+            <button class="btn1" title="Add"><i class="fa fa-plus-circle"></i> Add</button>
+            <button class="btn2" title="Delete"><i class="fa fa-trash"></i> Delete</button>
+            <button class="btn2" title="Tag" data-toggle="modal" data-target=".bd-example-modal-sm"> <i
+                class="fa fa-tags"></i> Tag</button>
+            <button class="btn1" title="Select All"><i class="fa fa-check"></i> Select All</button>
+          </div>
+          <div class="col-md-12 text-center footer">
+            <input class="file-upload-input-add" [hidden]="true" type='file' accept="image/*" #file [multiple]="true"
+              (change)="onFileChange($event)" />
+            <!--<button class="roundbtn prev is-show" title="Back"><i class="fa fa-hand-o-left"></i></button>-->
+            <button class="roundbtn" onclick="$('.file-upload-input-add').trigger( 'click' )" title="Add Images"><i
+                class="fa fa-plus"></i></button>
+            <button class="roundbtn" title="Delete" (click)="deleteAllFiles()"><i class="fa fa-trash"></i> </button>
+            <button class="roundbtn" title="Tag" data-toggle="modal" data-target=".bd-example-modal-sm"> <i
+                class="fa fa-tags"></i> Tag</button>
+            <button class="roundbtn" title="Select All"><i class="fa fa-check"></i></button>
+            <button #nextStep class="roundbtn next is-show" (click)="onTabSelected(3)" title="Next"><i
+                class="fa fa-hand-o-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!--tab 3-->
+      <!-- <div *ngIf="activeStep==3"> -->
+
+    </div>
+
+  </ng-template>
+  <!-- Small modal -->
+  <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header border-0 p-0 m-0 justify-content-center text-center">
+          <div class="two alt-two">
+            <h1 class="heading">
+              <span>Image Tag</span>
+            </h1>
+          </div>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <form #addTagForm="ngForm" (ngSubmit)="addTag(addTagForm.value)">
+            <div class="form-group">
+              <label for="tag-name" class="col-form-label">Add your Tag:</label>
+              <input type="text" class="form-control" id="tag-name" name="tagname" ngModel>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-0 p-0 m-0 justify-content-center text-center">
+          <button type="submit" form="ngForm" (click)="addTagForm.ngSubmit.emit()" class="btn1 bt"
+            (click)="addTag"><span><i class="fa fa-save"></i> Save</span></button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--end model-->
+</div>

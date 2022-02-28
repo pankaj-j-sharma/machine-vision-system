@@ -1,0 +1,134 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+    <div class="gear"></div>
+</div>
+<!--loader end-->
+
+<div class="card">
+    <div class="card-header">
+        <div class="two alt-two cchange">
+            <h1 class="heading">
+                <span>API Endpoints</span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="card-header pl-2 pr-0">
+        <div class="form-group row" id="model">
+            <label for="staticEmail" class="col-12 col-sm-12 col-md-2 col-lg-2 col-form-label required1">All Available Models</label>
+            <div class="col-12 col-sm-12 col-md-7 col-lg-7">
+                <select class="form-select form-control" (change)="selectAvlModel($event)">
+                   <option value="" disabled selected hidden>Select from Available Models</option>
+                   <option *ngFor="let mdl of availableModels" value="{{mdl.id}}">{{mdl.name}}</option>
+               </select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-form-label required1" style="padding-top: 0px;">
+                <button (click)="generateAPIKeys()" class="btn btn1 btn4 noHover" [class.noHover]="this.selectedModel==''">{{genButtonText}}</button>
+            </div>
+        </div>
+        <div *ngIf="apiKeyGenerated">
+            <form id="configmodel" class="formb">
+                <div class="row">
+                    <div class="col-12 col-md-4" style="padding-left: 0px;">
+                        <div class="form-group row">
+                            <label for="api_user" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label" style="padding-left: 0px;">User Name</label>
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                <input type="text" class="form-control" name="api_user" [value]="apiUsername" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-7">
+                        <div class="form-group row">
+                            <label for="endpoint_key" class="col-3 col-sm-3 col-md-3 col-lg-3 col-form-label">Endpoint Key</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8" style="display: flex;">
+                                <input type="password" name="endpoint_key" class="form-control" style="padding-right: 40px !important;" [value]="genkey" readonly #apikey />
+                                <button class="btn" style="margin:0px;margin-left: -50px;" (click)="copyToClipBoard(apikey);">
+                                    <i class="bg-project fa fa-solid fa-copy fa-lg" style="margin:5px;" ></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-4" style="padding-left: 0px;">
+                        <div class="form-group row">
+                            <label for="generated_on" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label" style="padding-left: 0px;">Generated On </label>
+                            <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                <input type="text" class="form-control" style="padding-right:0px !important;" name="generated_on" [value]="generatedOn" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-7">
+                        <div class="form-group row">
+                            <label for="endpoint_url" class="col-4 col-sm-3 col-md-3 col-lg-3 col-form-label">Endpoint Url</label>
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8" style="display: flex;">
+                                <input type="text" name="endpoint_url" class="form-control" style="padding-right: 40px !important;" [value]="apiEndpointUrl" readonly #apiurl />
+                                <button class="btn" style="margin:0px;margin-left: -50px;" (click)="copyToClipBoard(apiurl);">
+                                    <i class="bg-project fa fa-solid fa-copy fa-lg" style="margin:5px;" ></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="height: 30px; width: 100%;">
+                </div>
+
+                <div class="row">
+                    <div class="col-11 col-md-11" style="padding: 5px; border: 1px solid #31c2b3; height: 30px;">
+                        <label>Sample Request </label>
+                    </div>
+                    <div class="col-11 col-md-11" style="padding: 5px; border: 1px solid #31c2b3; height: 200px; border-top: none;">
+                        <!-- <p>
+                            <code>
+                            curl -F files=@image1.jpg -F files=@image2.jpg {{apiUploadFileUrl}}
+                            </code>
+                        </p> -->
+                        <pre>
+                            <code>
+    curl -X POST 
+    http://127.0.0.1:5003/v1/predict
+    -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' 
+    -F username={{apiUsername}} 
+    -F api_key={{genkey}} 
+    -F modelid={{selectedModel}} 
+    -F img11111=@_K5A5944_png.rf.45ad5e9303db918c04315eea8314883f.jpg 
+    -F img1112=@3_png.rf.9e90c71e18dfb5e69f1501d535cdf740.jpg                              
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="row" style="height: 30px; width: 100%;">
+                </div>
+
+                <div class="row">
+                    <div class="col-11 col-md-11" style="padding: 5px; border: 1px solid #31c2b3; height: 30px;">
+                        <label>Sample Response </label>
+                    </div>
+                    <div class="col-11 col-md-11" style="padding: 5px; border: 1px solid #31c2b3; height: 300px; border-top: none;">
+                        <pre style="height: inherit; overflow: hidden;">
+                            <code>
+    {{ '{' }}
+        "model_name": "{{selectedModelName}}",
+        "results": [
+            {{ '{' }}
+                "file": "http://127.0.0.1:5003/v1/getfile//API_Predictions\\17\\_K5A5944_png.rf.45ad5e9303db918c04315eea8314883f.jpg",
+                "prediction": "Air Comp Sd Port"
+            {{ '}' }},
+            {{ '{' }}
+                "file": "http://127.0.0.1:5003/v1/getfile//API_Predictions\\17\\3_png.rf.9e90c71e18dfb5e69f1501d535cdf740.jpg",
+                "prediction": "Fuel Feed Pump"
+            {{ '}' }}
+        ],
+        "success": "API Data retrieved"
+    {{ '}' }}
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+canvas#predChart {
+    margin: auto auto;
+    width: 50% !important;
+    height: auto !important;
+    // margin-left: -48px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    canvas#predChart {
+        width: 288px !important;
+        margin: auto auto;
+        padding-top: 10px;
+    }
+}

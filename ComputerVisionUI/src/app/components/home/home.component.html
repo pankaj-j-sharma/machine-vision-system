@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="home-html">
+   <head>
+      <title>Module Page</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+   </head>
+
+      <!--<body class="fixed-nav sticky-footer bg-dark" id="page-top">-->
+      <body class="fixed-nav sticky-footer home-body" id="page-top">
+         <!-- Navigation-->
+         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="mainNav">
+            <a class="navbar-brand" href="#"><img src="../../../assets/images/login/../../../assets/images/login/icon/logo2.png"></a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+               <!--sidebar goes here-->
+               <ul class="navbar-nav ml-auto">
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <i class="fa fa-fw fa-bell"></i>
+                     <span class="d-lg-none">Alerts
+                     <span class="badge badge-pill badge-warning">6 New</span>
+                     </span>
+                     <span class="indicator text-warning d-none d-lg-block">
+                     <i class="fa fa-fw fa-circle"></i>
+                     </span>
+                     </a>
+                     <div class="dropdown-menu menudropdown" aria-labelledby="alertsDropdown">
+                        <h6 class="dropdown-header">New Alerts:</h6>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">
+                           <span class="text-success">
+                           <strong>
+                           <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
+                           </span>
+                           <span class="small float-right text-muted">11:21 AM</span>
+                           <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">
+                           <span class="text-danger">
+                           <strong>
+                           <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong>
+                           </span>
+                           <span class="small float-right text-muted">11:21 AM</span>
+                           <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">
+                           <span class="text-success">
+                           <strong>
+                           <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
+                           </span>
+                           <span class="small float-right text-muted">11:21 AM</span>
+                           <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item small" href="#">View all alerts</a>
+                     </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <i class="fa fa-fw fa-user"></i>
+                     <span class="d-lg-none">Messages
+                     <span class="badge badge-pill badge-primary">12 New</span>
+                     </span>
+                     <span class="indicator text-primary d-none d-lg-block">
+                     <i class="fa fa-fw fa-circle"></i>
+                     </span>
+                     </a>
+                     <div class="dropdown-menu menudropdown" aria-labelledby="messagesDropdown">
+                        <h6 class="dropdown-header">New Messages:</h6>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">
+                           <strong>David Miller</strong>
+                           <span class="small float-right text-muted">11:21 AM</span>
+                           <div class="dropdown-message small">Hey there! This new version of SB Admin is pretty awesome! These messages clip off when they reach the end of the box so they don't overflow over to the sides!</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">
+                           <strong>Jane Smith</strong>
+                           <span class="small float-right text-muted">11:21 AM</span>
+                           <div class="dropdown-message small">I was wondering if you could meet for an appointment at 3:00 instead of 4:00. Thanks!</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">
+                           <strong>John Doe</strong>
+                           <span class="small float-right text-muted">11:21 AM</span>
+                           <div class="dropdown-message small">I've sent the final files over to you for review. When you're able to sign off of them let me know and we can discuss distribution.</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item small" href="#">View all messages</a>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </nav>
+         <div class="content-wrapper pt-1">
+            <div class="two alt-two1">
+               <h1 class="logo">				
+               </h1>
+            </div>
+            <div class="container-fluid">
+               <div class="row justify-content-center pt-0 mt-0 mb-3">
+                  <div class="two alt-two">
+                     <h1 class="heading">
+                        <span>Prebuilt models and AI Applications</span>
+                     </h1>
+                  </div>
+               </div>
+
+               <div *ngIf="homePageApps.length<=3 ; then appTemplateOnly3 else appTemplateFull"></div>
+               <!-- Display only 3 or less apps -->               
+               <ng-template #appTemplateOnly3>  
+                  <div class="row"> 
+                     <div class="col-6 col-md-4  col-sm-6 col-lg-4" style="height:40px;" >
+                     </div>   
+                  </div>
+                  <div class="row"> 
+                  <div *ngFor="let app of homePageApps " class="col-6 col-md-4  col-sm-6 col-lg-4" >
+                     <div *ngIf="app.Name=='processtracking'; then itemTemplateWithoutRole else itemTemplateWithRole"></div>
+                     <ng-template #itemTemplateWithRole>
+                     <div class="circle-lg" type="button" data-toggle="modal" data-target="#roleModal" (click)="appSelection(app.Name,'withrole')">						
+                        <img class="circle-icon-lg" src="{{app.Url}}" alt="">						
+                     </div>
+                     </ng-template>
+                     <ng-template #itemTemplateWithoutRole>
+                        <div class="circle-lg" type="button" (click)="appSelection(app.Name,'norole')" >						
+                           <img class="circle-icon-lg" src="{{app.Url}}" alt="">						
+                        </div>   
+                     </ng-template>          
+                     <div class="product-card-body">
+                        <h3 class="product-title-lg"><a href="#">{{app.Description}}</a></h3>
+                        <div><button class="arrowimg" style="left:70px;"></button></div>
+                     </div>
+                  </div>
+                  </div>
+               </ng-template>
+
+               <ng-template #appTemplateFull>   
+               <!-- Display home page apps  -->
+               <div *ngFor="let r of arrOfRows" class="row">
+                  <div *ngFor="let app of homePageApps | slice:(r*numberOfCols):(r*numberOfCols+numberOfCols)" class="col-6 col-md-4  col-sm-6 col-lg-4" >
+                     <div *ngIf="app.Name=='processtracking'; then itemTemplateWithoutRole else itemTemplateWithRole"></div>
+                     <ng-template #itemTemplateWithRole>
+                     <div class="circle" type="button" data-toggle="modal" data-target="#roleModal" (click)="appSelection(app.Name,'withrole')">						
+                        <img class="circle-icon" src="{{app.Url}}" alt="">						
+                     </div>
+                     </ng-template>
+                     <ng-template #itemTemplateWithoutRole>
+                        <div class="circle" type="button" (click)="appSelection(app.Name,'norole')">						
+                           <img class="circle-icon" src="{{app.Url}}" alt="">						
+                        </div>   
+                     </ng-template>
+          
+                     <div class="product-card-body">
+                        <h3 class="product-title"><a href="#">{{app.Description}}</a></h3>
+                        <div><button class="arrowimg"></button></div>
+                     </div>
+                  </div>
+               </div>
+               </ng-template>
+               
+            </div>
+
+            <!--model start-->
+            <div class="modal fade" id="roleModal">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-body pt-0">
+                        <div class="row justify-content-center mt-0 pt-0 pb-4">
+                           <div class="two alt-two">
+                              <h1 class="heading">
+                                 <span>Select a Role to Continue</span>
+                              </h1>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-6 col-md-6 col-sm-6">
+                              <div class="rolemodel" (click)="roleSelection('bu')">
+                                 <img class="role-icon" src="../../../assets/images/login/../../../assets/images/login/icon/bus-user-w.png" alt="">				
+                              </div>
+                              <div class="product-card-body mt-0">
+                                 <h3 class="product-title"><a href="#">Business User</a></h3>
+                              </div>
+                           </div>
+                           <div class="col-6 col-md-6 col-sm-6">
+                              <div class="rolemodel" (click)="roleSelection('ds')">
+                                 <img class="role-icon" src="../../../assets/images/login/../../../assets/images/login/icon/dataSci-user.png" alt="">				
+                              </div>
+                              <div class="product-card-body mt-0">
+                                 <h3 class="product-title"><a href="#">Data Scientist</a></h3>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!--model end-->            
+         </div>
+   </body>
+</html>

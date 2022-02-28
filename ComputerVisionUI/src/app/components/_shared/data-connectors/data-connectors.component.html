@@ -1,0 +1,380 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+    <div class="gear"></div>
+</div>
+<!--loader end-->
+
+<!--model start-->
+<div #myconnectors class="modal fade model-lg" id="myconnectors">
+    <div class="modal-dialog modal-lg" style="top:5%">
+        <div class="modal-content" style="border-radius:0px;">
+            <div *ngIf="!loadConnectors" class="modal-body">
+                <button type="button" (click)="toggleLoadConnectors()" class="btn btn3" style="width: 95%;">
+                    <span> Load all Available Connection Options</span>
+                </button>
+            </div>
+
+            <div *ngIf="loadConnectors" class="modal-body">
+                <div class="row justify-content-center mt-0 pt-0 pb-4">
+                    <h1 class="heading">
+                        <span>{{modalHeading}}</span>
+                    </h1>
+                </div>
+
+                <div *ngIf="!isOptionSelected" class="card gallarycard">
+                    <div class="row gallery">
+                        <div class="col-lg-3 col-md-3 col-xs-6 thumb">
+                            <div class="conn-types-panel">
+                                <input type="text" (keyup)="search($event)" class="form-control searchLabel" placeholder="Search" id="searchLabel">
+                                <button *ngFor="let conn of allConnectors" class="btn btn1" [ngClass]="selectedConnector.name==conn.name ? 'btn1-clicked':''" (click)="openTab(conn.name)">{{conn.name}}</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-xs-6 thumb">
+                            <label class="col-form-label lbl1">{{selectedConnector.name}}</label>
+                            <div style="border-top:2px solid #ccc; width:100%">
+                                <div class="optn-main">
+                                    <div *ngFor="let optn of subOptions">
+                                        <button class="btn btn1" style="width:100%" [ngClass]="selectedSubOption.name==optn.name ? 'btn1-clicked':''" (click)="openSubOption(optn.name)"><i class="bg-conn-icons fa fa-fw" [ngStyle]="{background: 'url('+assetPath+''+optn.icon+')'}"></i>{{optn.name}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-right p-1" style="border:none; margin-top:15px;">
+                        <button type="button" class="btn btn3">
+                            <span> Connect</span>
+                        </button>
+                        <button type="button" class="btn btn3">
+                            <span>Cancel</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Connector suboptions  -->
+                <div *ngIf="isOptionSelected && !isDirectoriesLoaded" class="card gallarycard">
+                    <div class="row gallery">
+                        <div class="col-lg-11 col-md-11 col-xs-6 thumb">
+                            <form #connectOptns="ngForm" (ngSubmit)="loadConnectorData(connectOptns.value)">
+
+                                <!-- Amazon S3 Bucket suboptions  -->
+                                <div *ngIf="modalHeading=='Amazon S3 Bucket'">
+                                    <div class="form-group">
+                                        <label for="accesskeyid" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;">Access Key Id</label>
+                                        <input type="text" class="form-control" id="accesskeyid" name="accesskeyid" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="accesskeysecret" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;">Access Key Secret</label>
+                                        <input type="password" class="form-control" id="accesskeysecret" name="accesskeysecret" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bucketname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;">Bucket</label>
+                                        <input type="text" class="form-control" id="bucketname" name="bucketname" ngModel>
+                                    </div>
+                                </div>
+
+
+                                <!-- Amazon Redshift suboptions  -->
+                                <div *ngIf="modalHeading=='Amazon Redshift'">
+                                    <div style="display: flex;">
+                                        <div class="form-group" style="width: 65%;">
+                                            <label for="awsrshostname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Redshift Host Name</label>
+                                            <input type="text" class="form-control" id="awsrshostname" name="awsrshostname" ngModel>
+                                        </div>
+                                        <div class="form-group" style="width: 5%;">
+                                        </div>
+                                        <div class="form-group" style="width: 30%;">
+                                            <label for="awsrsportno" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Port</label>
+                                            <input type="text" class="form-control" id="awsrsportno" name="awsrsportno" ngModel>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="awsrsusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Redshift Username</label>
+                                        <input type="text" class="form-control" id="awsrsusername" name="awsrsusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="awsrspassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Redshift Password</label>
+                                        <input type="password" class="form-control" id="awsrspassword" name="awsrspassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="awsrsdbname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Redshift Database</label>
+                                        <input type="text" class="form-control" id="awsrsdbname" name="awsrsdbname" ngModel>
+                                    </div>
+                                </div>
+
+
+                                <!-- Azure SQL suboptions  -->
+                                <div *ngIf="modalHeading=='Azure SQL Database'">
+                                    <div style="display: flex;">
+                                        <div class="form-group" style="width: 65%;">
+                                            <label for="azsqlhostname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Azure SQL Host Name</label>
+                                            <input type="text" class="form-control" id="azsqlhostname" name="azsqlhostname" ngModel>
+                                        </div>
+                                        <div class="form-group" style="width: 5%;">
+                                        </div>
+                                        <div class="form-group" style="width: 30%;">
+                                            <label for="azsqlportno" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Port</label>
+                                            <input type="text" class="form-control" id="azsqlportno" name="azsqlportno" ngModel>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="azsqlusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Azure SQL Username</label>
+                                        <input type="text" class="form-control" id="azsqlusername" name="azsqlusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="azsqlpassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Azure SQL Password</label>
+                                        <input type="password" class="form-control" id="azsqlpassword" name="azsqlpassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="azsqldbname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Azure SQL Database</label>
+                                        <input type="text" class="form-control" id="azsqldbname" name="azsqldbname" ngModel>
+                                    </div>
+                                </div>
+
+
+                                <!-- Azure Blob Storage suboptions  -->
+                                <div *ngIf="modalHeading=='Azure Blob Storage'">
+                                    <div class="form-group">
+                                        <label for="storageaccountname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Azure Storage Account Name</label>
+                                        <input type="text" class="form-control" id="storageaccountname" name="storageaccountname" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="storageaccountkey" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Azure Storage Account Key</label>
+                                        <input type="password" class="form-control" id="storageaccountkey" name="storageaccountkey" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="containername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Container Name</label>
+                                        <input type="text" class="form-control" id="containername" name="containername" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- Azure Data Lake Storage Gen2 suboptions  -->
+                                <div *ngIf="modalHeading=='Azure Data Lake Storage Gen2'">
+                                    <div class="form-group">
+                                        <label for="storageaccountname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Azure Storage Account Name ( Data Lake Gen2 )</label>
+                                        <input type="text" class="form-control" id="storageaccountname" name="storageaccountname" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="storageaccountkey" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Azure Storage Account Key ( Data Lake Gen2 )</label>
+                                        <input type="password" class="form-control" id="storageaccountkey" name="storageaccountkey" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="containername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">File System Name</label>
+                                        <input type="text" class="form-control" id="containername" name="containername" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- Snowflake suboptions  -->
+                                <div *ngIf="modalHeading=='Snowflake'">
+                                    <div class="form-group">
+                                        <label for="snowflakeusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Snowflake Username</label>
+                                        <input type="text" class="form-control" id="snowflakeusername" name="snowflakeusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="snowflakepassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Snowflake Password</label>
+                                        <input type="password" class="form-control" id="snowflakepassword" name="snowflakepassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="snowflakeaccountname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Snowflake Account Name</label>
+                                        <input type="text" class="form-control" id="snowflakeaccountname" name="snowflakeaccountname" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- PostgreSQL suboptions  -->
+                                <div *ngIf="modalHeading=='PostgreSQL Database'">
+                                    <div style="display: flex;">
+                                        <div class="form-group" style="width: 65%;">
+                                            <label for="postgreshostname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Host Name</label>
+                                            <input type="text" class="form-control" id="postgreshostname" name="postgreshostname" ngModel>
+                                        </div>
+                                        <div class="form-group" style="width: 5%;">
+                                        </div>
+                                        <div class="form-group" style="width: 30%;">
+                                            <label for="postgresportno" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Port</label>
+                                            <input type="text" class="form-control" id="postgresportno" name="postgresportno" ngModel>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postgresusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Username</label>
+                                        <input type="text" class="form-control" id="postgresusername" name="postgresusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postgrespassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Password</label>
+                                        <input type="password" class="form-control" id="postgrespassword" name="postgrespassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postgresdbname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Database</label>
+                                        <input type="text" class="form-control" id="postgresdbname" name="postgresdbname" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- MySQL suboptions  -->
+                                <div *ngIf="modalHeading=='MySQL Database'">
+                                    <div style="display: flex;">
+                                        <div class="form-group" style="width: 65%;">
+                                            <label for="mysqlhostname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Host Name</label>
+                                            <input type="text" class="form-control" id="mysqlhostname" name="mysqlhostname" ngModel>
+                                        </div>
+                                        <div class="form-group" style="width: 5%;">
+                                        </div>
+                                        <div class="form-group" style="width: 30%;">
+                                            <label for="mysqlportno" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Port</label>
+                                            <input type="text" class="form-control" id="mysqlportno" name="mysqlportno" ngModel>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mysqlusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Username</label>
+                                        <input type="text" class="form-control" id="mysqlusername" name="mysqlusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mysqlpassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Password</label>
+                                        <input type="password" class="form-control" id="mysqlpassword" name="mysqlpassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mysqldbname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Database</label>
+                                        <input type="text" class="form-control" id="mysqldbname" name="mysqldbname" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- SQL Server suboptions  -->
+                                <div *ngIf="modalHeading=='SQL Server Database'">
+                                    <div style="display: flex;">
+                                        <div class="form-group" style="width: 65%;">
+                                            <label for="tsqlhostname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Host Name</label>
+                                            <input type="text" class="form-control" id="tsqlhostname" name="tsqlhostname" ngModel>
+                                        </div>
+                                        <div class="form-group" style="width: 5%;">
+                                        </div>
+                                        <div class="form-group" style="width: 30%;">
+                                            <label for="tsqlportno" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Port</label>
+                                            <input type="text" class="form-control" id="tsqlportno" name="tsqlportno" ngModel>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tsqlusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Username</label>
+                                        <input type="text" class="form-control" id="tsqlusername" name="tsqlusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tsqlpassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Password</label>
+                                        <input type="password" class="form-control" id="tsqlpassword" name="tsqlpassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tsqldbname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Database</label>
+                                        <input type="text" class="form-control" id="tsqldbname" name="tsqldbname" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- Oracle suboptions  -->
+                                <div *ngIf="modalHeading=='Oracle Database'">
+                                    <div style="display: flex;">
+                                        <div class="form-group" style="width: 65%;">
+                                            <label for="oraclehostname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Host Name</label>
+                                            <input type="text" class="form-control" id="oraclehostname" name="oraclehostname" ngModel>
+                                        </div>
+                                        <div class="form-group" style="width: 5%;">
+                                        </div>
+                                        <div class="form-group" style="width: 30%;">
+                                            <label for="oracleportno" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Port</label>
+                                            <input type="text" class="form-control" id="oracleportno" name="oracleportno" ngModel>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="oracleusername" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px; width:90%;">Username</label>
+                                        <input type="text" class="form-control" id="oracleusername" name="oracleusername" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="oraclepassword" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Password</label>
+                                        <input type="password" class="form-control" id="oraclepassword" name="oraclepassword" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="oracledbname" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Database</label>
+                                        <input type="text" class="form-control" id="oracledbname" name="oracledbname" ngModel>
+                                    </div>
+                                </div>
+
+
+                                <!-- Python Connector suboptions  -->
+                                <div *ngIf="modalHeading=='Python Script ( Custom )'">
+                                    <div class="form-group">
+                                        <label for="pythonreqfile" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">File Path for requirements.txt file</label>
+                                        <input type="file" class="form-control" id="pythonreqfile" name="pythonreqfile" accept="text/plain" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pythonsrcfile" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Custom Python Script path</label>
+                                        <input type="file" class="form-control" id="pythonsrcfile" name="pythonsrcfile" accept=".py" ngModel>
+                                    </div>
+                                </div>
+
+                                <!-- Hadoop File (HDFS) Connector suboptions  -->
+                                <div *ngIf="modalHeading=='Hadoop File (HDFS)'">
+                                    <div class="form-group">
+                                        <label for="hdpremoteurl" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Remote Url</label>
+                                        <input type="text" class="form-control" id="hdpremoteurl" name="hdpremoteurl" accept="text/plain" ngModel>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pythonsrcfile" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Custom Python Script path</label>
+                                        <input type="text" class="form-control" id="pythonsrcfile" name="pythonsrcfile" accept=".py" ngModel>
+                                    </div>
+                                </div>
+
+
+                                <!-- GCP BigQuery Connector suboptions  -->
+                                <div *ngIf="modalHeading=='Google BigQuery' || modalHeading=='Google Cloud Storage' || modalHeading=='Google Cloud Datastore'">
+                                    <div class="form-group">
+                                        <label for="bqCredentialFile" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Credentials File</label>
+                                        <input type="file" (change)="onFileChange($event)" class="form-control" id="bqCredentialFile" name="bqCredentialFile" accept="application/json" ngModel>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label for="bqCredentialContent" class="col-form-label lbl1" style="background-color: transparent;border: transparent; padding-left:0px;width:90%;">Paste the contents of the Credential File</label>
+                                        <textarea type="text" rows="5" cols="50" class="form-control" id="bqCredentialContent" name="bqCredentialContent" ngModel></textarea>
+                                    </div> -->
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right p-1" style="border:none; margin-top:15px;">
+                        <button type="submit" form="ngForm" (click)="connectOptns.ngSubmit.emit()" class="btn btn3">
+                            <span> Connect</span>
+                        </button>
+                        <button type="button" class="btn btn3" (click)="isOptionSelected=false; modalHeading='Connectors'">
+                            <span>Back</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Connector loaded directories  -->
+                <div *ngIf="isDirectoriesLoaded" class="card gallarycard">
+                    <div class="row spinnerWrapper align-items-center justify-content-center" *ngIf="processing">
+                        <div class="dot-elastic"></div>
+                    </div>
+                    <div class="row gallery">
+                        <div class="col-lg-11 col-md-11 col-xs-6 thumb">
+                            <label class="col-form-label lbl1" style="width:100%;overflow-x:clip;">{{currentPathBreadcrumb}}</label>
+                            <div style="border-top:2px solid #ccc; width:100%">
+                                <div class="optn-main">
+                                    <button *ngIf="currentDirectoryPath.length>0" class="btn btn1" style="width:100%; border-bottom:1px solid #ccc; background-color:#eee;" (click)="navigateNext('..')"><i class="fa fa-arrow-left" style="color:#aaa;"></i></button>
+                                    <button *ngFor="let dir of loadedDirectories" class="btn btn1" style="width:100%; border-bottom:1px solid #ccc;" (click)="navigateNext(dir)">{{dir}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-right p-1" style="border:none; margin-top:15px;" *ngIf="!processing">
+                        <button type="button" class="btn btn3">
+                            <span> Map</span>
+                        </button>
+                        <button type="button" class="btn btn3" (click)="isDirectoriesLoaded=false;">
+                            <span>Back</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--model end-->

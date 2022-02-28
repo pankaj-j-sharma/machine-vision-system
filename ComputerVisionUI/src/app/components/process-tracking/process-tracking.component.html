@@ -1,0 +1,367 @@
+<!--first tab section-->
+<div *ngIf="!searchClicked" class="card">
+   <div class="card-header">
+      <div class="two alt-two cchange">
+         <h1 class="heading">
+            <span><i class="fa fa-tablet"></i> Process Tracking - {{activeTab}} </span>
+         </h1>
+      </div>
+   </div>
+   <div class="card-body col-md-8 tabdiv" #tabsdiv>
+      <div class="tabbable-responsive pt-3">
+         <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+               <li class="nav-item text-center">
+                  <a class="nav-link active" id="first-tab" (click)="activeTab='Stored Videos'" data-toggle="tab" href="#first" role="tab" aria-controls="first" aria-selected="true"><i class="fa fa-video-camera"></i><br/>Stored Videos</a>
+               </li>
+               <li class="nav-item text-center">
+                  <a class="nav-link" id="second-tab" (click)="activeTab='Cycles and Tags'" data-toggle="tab" href="#second" role="tab" aria-controls="second" aria-selected="false"><i class="fa fa-tags"></i><br/>Cycles and Tags</a>
+               </li>
+               <li class="nav-item text-center">
+                  <a class="nav-link" id="third-tab" (click)="activeTab='Video Analytics'" data-toggle="tab" href="#third" role="tab" aria-controls="third" aria-selected="false"><i class="fa fa-tags"></i><br/>Video Analytics</a>
+               </li>
+            </ul>
+         </div>
+         <div class="tab-content">
+            <div class="tab-pane fade show active" id="first" role="tabpanel" aria-labelledby="first-tab">
+               <h5 class="card-title"></h5>
+               <section class="main pt-5">
+                  <form class="search" id="search-autocomplete" method="post" #searchAnalytics ="ngForm" (ngSubmit)="searchVideos(searchAnalytics.value)" >
+                  <input type="text"  id="form1" name="searchData" value="" placeholder="Search..." (ngModelChange)="loadResults($event)"  ngModel />
+                  <ul class="results" >
+                     <li *ngFor="let res of searchResults"><a (click)="selectResultOption(res.id)" href="#" >{{res.title}}<br /><span>{{res.description}}</span></a></li>
+                  </ul>
+                  <button type="submit" class="btn1 bt mt-4 searchbtn">
+                  <i class="fa fa-search"></i> Search
+                  </button>
+                  </form>
+               </section>
+            </div>
+            <div class="tab-pane fade" id="second" role="tabpanel" aria-labelledby="second-tab">
+               <h5 class="card-title"></h5>
+               <section class="main pt-5">
+                  <form class="search" method="post" action="#" >
+                     <input type="text" name="q" value="" placeholder="Search..." />
+                     <ul class="results" >
+                        <li *ngFor="let res of searchResults"><a (click)="selectResultOption(res.id)" href="#" >{{res.title}}<br /><span>{{res.description}}</span></a></li>
+                     </ul>
+                     <button type="button" class="btn1 bt mt-4 searchbtn">
+                     <i class="fa fa-search"></i> Search
+                     </button>
+                  </form>
+               </section>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- end first tab section-->
+<!--second section-->
+<div *ngIf="searchClicked && activeTab=='Stored Videos'"  class="card">
+   <div class="card-header">
+      <div class="two alt-two cchange">
+         <h1 class="heading">
+            <span><i class="fa fa-tablet"></i> Process Tracking - {{activeTab}} </span>
+         </h1>
+      </div>
+   </div>
+   <div class="card-body accordion pt-0" id="accordian" >
+      <div id="faq">
+      <form #filterOptions="ngForm" (ngSubmit)="applyFilterOptions(filterOptions.value)">
+         <div class="row" id="faqhead6">
+            <a href="#" class="collapsed btn3" data-toggle="collapse" data-target="#faq6"
+               aria-expanded="true" aria-controls="faq6">                             
+            <span class=""><i class="fa fa-filter"></i> Filter  </span>                              
+            </a>
+         </div>
+         <div class="row">
+            <div id="faq6" class="col-md-12 collapse" aria-labelledby="faqhead6" data-parent="#faq">
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header" >
+                        <a href="#" class="btn btn-header-link" >                             
+                        <span class="sectitle"> Recent Searches</span>                                  
+                        </a>
+                     </div>
+                     <div class="card-body">
+                        <label *ngFor="let search of recentSearches" class="checkcontainer">{{search}}
+                        <input type="checkbox" name="{{search}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                        <span class="checkmark"></span>
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header" >
+                        <a href="" class="btn btn-header-link" >Time Range</a>
+                     </div>
+                     <div class="card-body">
+                        <div class="slidecontainer">
+                           <p>Range slider:</p>
+                           <input type="range" min="1" max="100" value="50" id="myRange" name="timeRange" (change)="onFilterInputChange($event,'slider')">
+                           <p>Value: <span id="demo"></span></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header" >
+                        <a href="" class="btn btn-header-link" >    Cycle Time</a>
+                     </div>
+                     <div class="card-body">
+                        <label for="start">Start Date:</label>
+                        <input type="date" id="start" name="trip-start" class="form-control date" value="2018-07-22"  min="2018-01-01" max="2018-12-31">  
+                        <label for="start">End Date:</label>
+                        <input type="date" id="start" name="trip-start" class="form-control date"  value="2018-07-22"  min="2018-01-01" max="2018-12-31">                  
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header">
+                        <a href="" class="btn btn-header-link" >    Data Source</a>
+                     </div>
+                     <div class="card-body">
+                        <label *ngFor="let source of dataSources; let i = index;" class="checkcontainer">{{source}}
+                        <input type="checkbox" name="{{source}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                        <span class="checkmark"></span>
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header" >
+                        <a href="" class="btn btn-header-link" >    Active Stations</a>
+                     </div>
+                     <div class="card-body">
+                        <label *ngFor="let station of activeStations" class="checkcontainer">{{station}}
+                        <input type="checkbox" name="{{station}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                        <span class="checkmark"></span>
+                        </label>      
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header">
+                        <a href="" class="btn btn-header-link">Products</a>
+                     </div>
+                     <div class="card-body">
+                        <label *ngFor="let prdNo of productNos" class="checkcontainer">{{prdNo}}
+                        <input type="checkbox" checked="checked" name="{{prdNo}}" (change)="onFilterInputChange($event,'checkbox')">
+                        <span class="checkmark"></span>
+                        </label>                                                           
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+      </div>
+      <div class="row" id="lower_2">
+         <div class="col-12 col-md-8">
+            <video autoplay width="400" height="300" [src]="currentItem.Source" type="video/mp4" controls>
+            </video>
+            <div *ngIf="selectedPartNo!=''" class="row" style="float:right;width:100%; margin:5px;padding-left:15px;">
+               <div class="col-12 col-md-7" style="padding-top:15px;">
+                  <p class="video-title">{{currentItem.Title}}</p>
+                  <p [hidden]="true" class="video-desc">{{currentItem.Description}}</p>
+                  <p [hidden]="true" class="video-time">{{currentItem.CycleDate}}</p>
+               </div>
+               <div class="col-12 col-md-5">
+                  <button type="button" (click)="navigateToAnalytics('selectedPartNo')" class="btn1 bt" style="float:right;margin-right:27px"><span><i class="fa "></i>Get
+                     Analytics for Part {{selectedPartNo}}</span>
+                  </button>
+               </div>   
+            </div>   
+         </div>
+         <div class="col-12 col-md-4 menu">
+            <ul class="nav nav-tabs videolist">
+               <li *ngFor="let item of playlist" (click)="onClickPlaylistItem(item)">
+               <a href="" data-toggle="tab">
+                  <div class="post-thumbnail">
+                     <img class="img-responsive" src="{{item.Thumbnail}}" alt="post-thumbnail"/>
+                  </div>
+                  <h3>{{item.Title}}</h3>
+                  <h3>{{item.ProductNo}}</h3>
+               </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- Video Analytics Screen  -->
+<div *ngIf="searchClicked && activeTab=='Video Analytics'"  class="card">
+   <div class="card-header">
+      <div class="two alt-two cchange">
+         <h1 class="heading">
+            <span><i class="fa fa-tablet"></i> {{activeTab}} </span>
+         </h1>
+      </div>
+   </div>
+      <div class="card-body accordion pt-0" id="accordian" style="height:60px;">
+      <div id="faq">
+      <form #filterOptions="ngForm" (ngSubmit)="applyFilterOptions(filterOptions.value)">
+         <div [hidden]="true" class="row" id="faqhead6">
+            <div *ngIf="navigatedFrom!=''"  style="width:88%">
+               <span [hidden]="true" class="" style="font-size:15;font-weight:400;"><i class="fa fa-bar-chart"></i> Select one or more metrics option </span>                              
+               <a href="#" (click)="navigateBack($event)" class="collapsed btn3">
+                  <span class="" ><i class="fa fa-arrow-left"></i> Back  </span>                              
+               </a>
+            </div>
+            <a href="#" class="collapsed btn3" style="margin-right:10px;" data-toggle="collapse" data-target="#faq6"
+               aria-expanded="true" aria-controls="faq6">                             
+            <span class=""><i class="fa fa-filter"></i> Filter  </span>                              
+            </a>
+         </div>
+         <div class="row">
+            <div class="col-md-12">
+            <!--
+            <div id="faq6" class="col-md-12 collapse" aria-labelledby="faqhead6" data-parent="#faq">
+            -->
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header no-padding">
+                        <a href="#" class="btn btn-header-link" id="datasourcesheader" data-toggle="collapse" data-target="#datasources" aria-expanded="false">    Data Source</a>
+                     </div>
+                     <div class="collapse" data-parent="#datasourcesheader" id="datasources">
+                        <div class="card-body" >
+                           <label *ngFor="let source of dataSources; let i = index;" class="checkcontainer">{{source}}
+                           <input type="checkbox" name="{{source}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                           <span class="checkmark"></span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header no-padding">
+                        <a href="#" class="btn btn-header-link" id="kpimetricssheader" data-toggle="collapse" data-target="#kpimetrics">Metrics</a>
+                     </div>
+                     <div class="collapse" data-parent="#datasourcesheader" id="kpimetrics">
+                        <div class="card-body" >
+                           <label *ngFor="let metric of kpiMetrics; let i = index;" class="checkcontainer">{{metric}}
+                           <input type="checkbox" name="{{metric}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                           <span class="checkmark"></span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header no-padding" >
+                        <a href="#" id="daterangeheader" class="btn btn-header-link" data-toggle="collapse" data-target="#daterange" >    Date Range</a>
+                     </div>
+                     <div class="collapse" id="daterange" data-parent="#daterangeheader">
+                        <div class="card-body" >
+                           <label for="start">Start Date:</label>
+                           <input type="date" id="start" name="trip-start" class="form-control date" value="2018-07-22"  min="2018-01-01" max="2018-12-31">  
+                           <label for="start">End Date:</label>
+                           <input type="date" id="start" name="trip-start" class="form-control date"  value="2018-07-22"  min="2018-01-01" max="2018-12-31">                  
+                        </div> 
+                     </div>   
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header no-padding" >
+                        <a href="#" class="btn btn-header-link" id="shiftsheader" data-toggle="collapse" data-target="#shifts">Shifts</a>
+                     </div>
+                     <div class="collapse" data-parent="#shiftsheader" id="shifts">
+                        <div class="card-body" >
+                           <label *ngFor="let shift of avlShifts; let i = index;" class="checkcontainer">{{shift}}
+                           <input type="checkbox" name="{{shift}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                           <span class="checkmark"></span>
+                           </label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header no-padding" >
+                        <a href="#" class="btn btn-header-link" id="activestnsheader" data-toggle="collapse" data-target="#activestns" >Active Stations</a>
+                     </div>
+                     <div class="collapse" data-parent="#activestnsheader" id="activestns">
+                        <div class="card-body">
+                           <label *ngFor="let station of activeStations" class="checkcontainer">{{station}}
+                           <input type="checkbox" name="{{station}}" checked="checked" (change)="onFilterInputChange($event,'checkbox')">
+                           <span class="checkmark"></span>
+                           </label>      
+                        </div>
+                     </div>   
+                  </div>
+               </div>
+               <div class="col-md-2">
+                  <div class="card">
+                     <div class="card-header no-padding">
+                        <a href="#" class="btn btn-header-link" id="partnosheader" data-toggle="collapse" data-target="#partnos" aria-expanded="false" aria-controls="partnos">Part Number</a>
+                     </div>
+                     <div class="collapse" data-parent="#partnosheader" id="partnos">
+                        <div class="card-body" >
+                           <label *ngFor="let partNo of partNos" class="checkcontainer">{{partNo}}
+                           <input type="checkbox" [checked]="partNo==selectedPartNo||navigatedFrom==''" name="{{partNo}}" (change)="onFilterInputChange($event,'checkbox')">
+                           <span class="checkmark"></span>
+                           </label>                                                           
+                        </div>
+                     </div>   
+                  </div>
+               </div>
+               <div [hidden]="true" class="col-md-2 ">
+                  <div class="card">
+                     <div class="card-header">
+                        <a href="#" class="btn btn-header-link" id="productnosheader" data-toggle="collapse" data-target="#productnos" aria-expanded="false" aria-controls="productnos">Product Code</a>
+                     </div>
+                     <div class="collapse" data-parent="#productnosheader" id="productnos">
+                        <div class="card-body" >
+                           <label *ngFor="let prdNo of productNos" class="checkcontainer">{{prdNo}}
+                           <input type="checkbox" checked="checked" name="{{prdNo}}" (change)="onFilterInputChange($event,'checkbox')">
+                           <span class="checkmark"></span>
+                           </label>                                                           
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+      </div>
+      <div *ngFor="let eChartOptions of allEcharts" class="card" style="margin-left:-20px;margin-right:-20px;">
+         <div class="card-body">
+            <div class="row" id="lower-analytics">
+               <div class="col-12 col-md-10">
+                  <div class=" chart-area">
+                     <!--<canvas #metricsChart id="metricsChart"> </canvas>
+                     -->
+                     <div echarts [options]="eChartOptions" style="height:500px;"
+                     (chartInit)="onChartEvent($event, 'chartInit')"
+                     (chartClick)="onChartEvent($event, 'chartClick')"
+                     (chartDblClick)="onChartEvent($event, 'chartDblClick')"
+                     (chartMouseDown)="onChartEvent($event, 'chartMouseDown')"
+                     (chartMouseUp)="onChartEvent($event, 'chartMouseUp')"
+                     (chartMouseOver)="onChartEvent($event, 'chartMouseOver')"
+                     (chartMouseOut)="onChartEvent($event, 'chartMouseOut')"
+                     (chartGlobalOut)="onChartEvent($event, 'chartGlobalOut')"
+                     (chartContextMenu)="onChartEvent($event, 'chartContextMenu')"
+                     (chartDataZoom)="onChartEvent($event, 'chartDataZoom')">
+                     </div>
+                  </div>              
+
+               </div>
+               <div class="col-12 col-md-2 menu">
+               </div>
+            </div>
+         </div>
+      </div>   
+   </div>
+</div>

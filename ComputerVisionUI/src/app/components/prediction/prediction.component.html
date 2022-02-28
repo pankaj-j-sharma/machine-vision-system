@@ -1,0 +1,206 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+    <div class="gear"></div>
+</div>
+<!--loader end-->
+
+<div class="card">
+    <div class="card-header">
+        <div class="two alt-two cchange">
+            <h1 class="heading">
+                <span>Prediction</span>
+            </h1>
+        </div>
+    </div>
+    <div *ngIf="historicalRuns.length>0" class="card-body pt-0" style="height: max-content;">
+        <div class="row justify-content-center text-center">
+            <div class="table-responsive col-12 col-md-12">
+                <table class="table table-hover" width="100%" cellspacing="0" id="datasamp">
+                    <thead class="mdb-color darken-3">
+                        <tr>
+                            <!--<th>No.</th>-->
+                            <th>Run Details</th>
+                            <th>Model</th>
+                            <th>Data Source</th>
+                            <th>Uploaded data</th>
+                            <th>Prediction</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let run of historicalRuns">
+                            <!--<td scope="row">{{run.RunId}}</td>-->
+                            <td scope="row">{{ run.RunDetails }}</td>
+                            <td scope="row">{{ run.ModelUsed }}</td>
+                            <td scope="row">{{ run.DataSource }}</td>
+                            <td scope="row">{{ run.UploadedData }}</td>
+                            <td scope="row">{{ (run.Prediction.length>20)? (run.Prediction | slice:0:20)+'..':(run.Prediction) }}</td>
+                            <td (click)="removeHistory(run.RunId)" style="cursor:pointer;">
+                                <span title="Delete"><i class="fa fa-trash"></i></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card-header pl-2 pr-0">
+        <div class="form-group row" id="model">
+            <label for="staticEmail" class="col-12 col-sm-12 col-md-4 col-lg-4 col-form-label required1">All Available Models</label>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                <select class="form-select form-control" (change)="selectAvlModel($event)">
+                   <option value="" disabled selected hidden>Select from Available Models</option>
+                   <option *ngFor="let mdl of availableModels" value="{{mdl.id}}">{{mdl.name}}</option>
+               </select>
+            </div>
+        </div>
+        <div *ngIf="selectedUseCase">
+            <div class="card">
+                <!--<div class="card-header"> 
+               <div class="two alt-two cchange">                               
+                 <span class="sectitle"> Model Configuration Detail</span>                                  
+               </div>                       
+               </div>-->
+                <div class="no-margin-padding">
+                    <form id="configmodel" class="formb">
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Loss</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="categorical_crossentropy" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Batch</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="32" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Accuracy</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="95" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Optimizer</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="rmsprop" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Epochs</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="15" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Image Mode</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="RGB" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Metrics</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="accuracy" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Image Size</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="220 200" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Epoch training threshold</label>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                        <input type="text" class="form-control" value="97" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-12 col-md-12" [hidden]="fileList.length>0">
+                        <div class="form-group droparea1" *ngIf="loadedImgUrl==''">
+                            <div draggable="true" ngClass="{{dragAreaClass}}">
+                                <h6>Drop files here to Upload your data</h6>
+                                <!--<a style="color:blackgrey" href="javascript:void(0)" (click)="file.click()"> or click to Upload your Images </a>-->
+                                <input type="file" #file [multiple]="true" (change)="onFileChange($event)" style="display: none;" />
+                            </div>
+                            <button type="button" (click)="file.click()" class="addimage"><i class="fa fa-picture-o"></i> Upload Image</button>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="fileList.length>0">
+                        <div class="col-12 col-md-12">
+                            <div class="card-body imagecount">
+                                <p>Total {{fileList.length}} images selected</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="(fileList.length>0) && videoUploaded" style="justify-content:center">
+                        <video width="600" height="auto" [src]="fileList[0].path" type="video/mp4" controls>
+                        </video>
+                    </div>
+
+                    <div class="row" *ngIf="(fileList.length>0) && (!validated) && !videoUploaded">
+                        <div class="col-12 col-md-12">
+                            <div class="card gallarycard gallarycard1">
+
+                                <div class="row gallery">
+                                    <div class="col-lg-2 col-md-2 col-xs-6 thumb" *ngFor="let file of fileList">
+                                        <a href="">
+                                            <figure><img class="img-fluid img-thumbnail" src="{{file.path}}" alt="Random Image" /></figure>
+                                            <p>{{file.result}}</p>
+                                            <p></p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="(fileList.length>0) && (validated) && !videoUploaded" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                        <div class="col-12 col-md-12">
+                            <div class="card gallarycard">
+                                <div class="row gallery">
+                                    <div class="col-lg-2 col-md-2 col-xs-6 thumb" *ngFor="let file of fileList">
+                                        <a href="javascript:void(0)" (click)="$event.preventDefault()">
+                                            <figure><img class="img-fluid img-thumbnail" src="{{file.path}}" alt="Random Image"></figure>
+                                            <label class="dlbl">{{file.result}}</label>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12 card ml" style="align-items:center">
+                            <app-chart *ngIf="validated && appChart.Type!='bar'" [appChart]="appChart"></app-chart>
+                            <div *ngIf="validated && appChart.Type=='bar'" class="card" style="height:400px; width: 600px; justify-content:center; border:none; margin-top:5px;">
+                                <div echarts [options]="eChartOptions"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center p-1" *ngIf="fileList.length>0">
+                    <button type="button" form="ngForm" (click)="validate($event)" class="btn1">
+                       <span><i class="fa fa-tasks"></i> Validate</span>
+                   </button>
+                    <button type="button" (click)="removeUpload()" class="btn2 btn4"><i class="fa fa-trash"></i> Remove</button>
+
+                    <button type="button" class="btn2">
+                       <span><i class="fa fa-times"></i> Cancel</span>
+                   </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

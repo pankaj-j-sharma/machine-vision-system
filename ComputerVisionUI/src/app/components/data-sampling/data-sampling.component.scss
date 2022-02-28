@@ -1,0 +1,173 @@
+.container-card {
+    width: 100%;
+    height: 85vh;
+}
+
+.dragarea {
+    height: 100%;
+    font-size: smaller;
+    border: 5px solid #bbb;
+    padding: 9px;
+    background-color: #fff;
+    color: #bbb;
+}
+.dragarea a {
+    color: #31c2b3 !important;}
+.droparea {
+    height: 100%;
+    font-size: smaller;
+    border: 5px dashed #bbb;
+    padding: 9px;
+    background-color: #eff;
+    color: #aaa;
+}
+
+.bg-success {
+    background-color: rgb(37 59 82 / 70%)!important;
+}
+
+.card-header {
+    text-align: center;
+}
+
+.container-card {
+    width: 100%;
+    height: 85vh;
+}
+
+.dragarea {
+    height: 100%;
+    font-size: smaller;
+    border: 4px dashed #bbb;
+    padding: 9px;
+    background-color: #fff;
+    color: #bbb;
+}
+#datasamp .fa.fa-trash{
+    font-size: 15px;
+}
+
+.droparea {
+    height: 100%;
+    font-size: smaller;
+    border: 4px dashed #bbb;
+    padding: 9px;
+    background-color: #fff;
+    color: #bbb;
+}
+
+.img-viewer {
+    height: 340px;
+    width: 600px
+}
+.table-responsive {
+    margin-top: 10px;
+}
+.m-img-viewer {
+    height: 6vw;
+    width: 7vw;
+    margin: 4px 2px 4px 4px;
+}
+
+.no-margin-padding {
+    padding: 1px;
+    margin: 0px;
+}
+
+.input-group.mb-3.input-group-sm {
+    margin-bottom: 4px !important;
+}
+
+th,
+td {
+    font-size: smaller;
+}
+
+span.input-group-text {
+    width: 100px;
+}
+
+button.btn1 {
+    padding: 5px 15px 5px 15px;
+}
+
+button.btn2 {
+    padding: 5px 15px 5px 15px;
+}
+.col-form-label
+{
+    display: flex;
+    color: #253b52;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e7e7e73b;
+    border: 1px solid #e7e7e78a;
+    border-radius: 0;
+}
+input.form-control {
+    text-align: center;
+}
+.formb{
+    padding: 5px 7px 5px 21px;}
+    .formb .form-group.row{
+        
+    margin-top: 5px;
+    margin-bottom: 5px;
+    }
+button.form-control.btn.btn-outline.dropdown-toggle {
+    padding: 0px;
+    margin: 0px;
+}
+
+.imgdroparea1{   
+    margin: 0;
+    padding: 0;
+   
+    height: 188px;}
+    .addimage {   
+        width: 100%;
+       margin: 5px 0 0;
+       color: #5c5c5c;
+       background: #e9e9e9;
+       border: none;
+       padding: 4px 10px;
+       border-radius: 4px;
+       border-bottom: 2px solid #adb0b0;
+       transition: all .2s ease;
+       outline: none;
+       text-transform: uppercase;
+       font-size: 12px;
+       margin-top: 5px;
+     }
+     h6{
+        font-size: 13px;
+        font-weight: normal;
+        text-align: center;
+        height: 100%;
+        padding: 42px 0 0;
+        color: #253b52;}
+     .addimage:hover,.addimage:active {
+       background: #31c2b3;  
+       border-bottom: 2px solid #253b52;
+       color: #ffffff;
+       transition: all .2s ease;
+       cursor: pointer;
+     }
+     
+.imagecount{
+    background-color: #f9f9f9!important;
+    color: #253b52;
+    padding: 46px 10px 10px!important;
+    text-align: center;
+    font-size: 16px;
+    border: 2px solid #31c2b3;
+    height: 130px;
+    text-transform: capitalize;
+    font-weight: 500;
+}
+.fa.fa-folder-open.fa-5x{
+    color:#daae01;
+}
+#validtnImagesPreview .modal-body,#testPercent .modal-body,#trainPercent .modal-body {
+   
+}

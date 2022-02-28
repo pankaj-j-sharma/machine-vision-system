@@ -1,0 +1,162 @@
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <button class="navbar-toggler navbar-toggler-right btn-noborder" style="display: block;" type="button" (click)="toggleSidebar()" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="width:1em;height:1em;"></span>
+    </button>
+    <a class="navbar-brand" href="#"><img src="../assets/images/logos/logo3.png"></a>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav navbar-sidenav collapsed" id="exampleAccordion">
+            <li *ngFor="let item of navSideBarItems" class="nav-item" data-toggle="tooltip" data-placement="right" title="{{item.title}}">
+                <div *ngIf="item.subItems.length>0; then subItemTemplate else mainItemTemplate"></div>
+                <ng-template #mainItemTemplate>
+                    <a class="nav-link" href="{{item.url}}">
+                        <i class="{{item.iconClass}} menu-icon"></i>
+                        <span class="nav-link-text">{{item.description}}</span>
+                    </a>
+                </ng-template>
+                <ng-template #subItemTemplate>
+                    <!-- Second level collapsible navigation menu -->
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#{{item.url}}" data-parent="#exampleAccordion">
+                        <i class="{{item.iconClass}}"></i>
+                        <span class="nav-link-text">{{item.description}}</span>
+                    </a>
+                    <ul *ngIf="item.subItems.length>0" class="sidenav-second-level collapse" id="{{item.url}}">
+                        <li *ngFor="let subItem of item.subItems">
+                            <div *ngIf="subItem.subItems.length>0; then subSubItemTemplate else mainSubItemTemplate"></div>
+                            <ng-template #mainSubItemTemplate>
+                                <a href="{{subItem.url}}">{{subItem.title}}</a>
+                            </ng-template>
+                            <ng-template #subSubItemTemplate>
+                                <!-- Third level collapsible navigation menu -->
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#{{subItem.url}}" data-parent="#exampleAccordion">
+                    {{subItem.description}}
+                    </a>
+                                <ul class="sidenav-third-level collapse" id="{{subItem.url}}">
+                                    <li *ngFor="let subSubItem of subItem.subItems">
+                                        <a href="{{subSubItem.url}}">{{subSubItem.title}}</a>
+                                    </li>
+                                </ul>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </ng-template>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav sidenav-toggler">
+            <li class="nav-item">
+                <a class="nav-link text-center" (click)="toggleSidebar()" id="sidenavToggler" style="display: none;">
+                    <i class="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle mr-lg-2" id="connectorsModal" href="#" data-toggle="modal" data-target="#myconnectors" aria-haspopup="true">
+                    <i class="fa fa-fw fa-plug " style="color:#2d3e45"></i>
+                    <span class="indicator {{connectIndicator}} d-none d-lg-block">
+                    <i class="fa fa-fw fa-circle"></i>
+                </span>
+                </a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-fw fa-bell"></i>
+                    <span class="d-lg-none">Alerts
+                <span class="badge badge-pill badge-warning">6 New</span>
+                    </span>
+                    <span class="indicator text-warning d-none d-lg-block">
+                <i class="fa fa-fw fa-circle"></i>
+            </span>
+                </a>
+                <div class="dropdown-menu menudropdown" aria-labelledby="alertsDropdown">
+                    <h6 class="dropdown-header">New Alerts </h6>
+
+                    <div class="dropdown-divider"></div>
+                    <a *ngFor="let alertItem of allAppAlerts" class="dropdown-item" href="{{alertItem.url}}">
+                        <span class="{{alertItem.titleClass}}">
+                <strong>
+                    <i class="{{alertItem.titleIcon}}"></i>{{alertItem.title}}</strong>
+                </span>
+                        <span class="small float-right text-muted">{{alertItem.alertTime}}</span>
+                        <div class="dropdown-message small">{{alertItem.description}}</div>
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item small" href="#">View all alerts</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-fw fa-user"></i>
+                    <span class="d-lg-none">Messages
+                <span class="badge badge-pill badge-primary">12 New</span>
+                    </span>
+                    <span class="indicator text-primary d-none d-lg-block">
+                <i class="fa fa-fw fa-circle"></i>
+            </span>
+                </a>
+                <div class="dropdown-menu menudropdown userd" aria-labelledby="messagesDropdown">
+                    <!-- <div> <h6 [hidden]="true" class="dropdown-header">New Messages:</h6>
+
+            <a type="button" class="dropdown-item" (click)="showUserProfile()">      
+                <div class="dropdown-message small">Profile</div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a type="button" class="dropdown-item" (click)="logoutUser()">
+                <div class="dropdown-message small">Logout</div>
+            </a>
+
+            <div [hidden]="true">    
+            <div class="dropdown-divider"></div>
+            <a *ngFor="let msg of allAppMsgs" class="dropdown-item" href="{{msg.url}}">
+                <strong>{{msg.name}}</strong>
+                <span class="small float-right text-muted">{{msg.msgTime}}</span>
+                <div class="dropdown-message small">{{msg.data}}</div>
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item small" href="#">View all messages</a>
+            </div> 
+            </div>-->
+                    <div class="container userpro" style="border-radius: 0px;">
+                        <div class="img-area">
+                            <div class="inner-area">
+                                <img [src]="userProfileImg" alt="">
+                            </div>
+                        </div>
+                        <div class="name">{{userFirstName}}</div>
+                        <div class="about">{{userOrganisation}}</div>
+                        <!--<div class="social-icons">
+                   <a href="#" class="fb"><i class="fab fa-facebook-f"></i></a>
+                   <a href="#" class="twitter"><i class="fab fa-whatsapp"></i></a>
+                   <a href="#" class="insta"><i class="fab fa-instagram"></i></a>
+                </div>-->
+                        <div>
+                            <button class="btn4 bt" (click)="showUserProfile()">Detail</button>
+                            <button class="btn4 bt" (click)="logoutUser()">Logout</button>
+                        </div>
+                        <!-- <div class="social-share">
+                   <div class="row uprow">
+                      <i class="fa fa-heart"></i>
+                      <span>30.4k </span>
+                   </div>
+                   <div class="row uprow">
+                      <i class="fa fa-comment"></i>
+                      <span>54.2k</span>
+                   </div>
+                   <div class="row uprow">
+                      <i class="fa fa-share"></i>
+                      <span>38.5k</span>
+                   </div>
+                </div>-->
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</nav>

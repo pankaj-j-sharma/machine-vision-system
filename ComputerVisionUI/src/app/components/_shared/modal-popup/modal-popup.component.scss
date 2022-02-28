@@ -1,0 +1,83 @@
+.two h1 span {
+    color: #253b52!important;
+}
+
+// .modal-dialog {
+//     max-width: 90% !important;
+// }
+.div-img {
+    color: transparent;
+    height: fit-content;
+    padding: 4px;
+    width: fit-content;
+    position: relative;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(2px);
+    z-index: 6;
+}
+
+.m-img-viewer {
+    width: 10vw;
+    z-index: 16;
+    margin: 4px 2px 4px 4px;
+}
+
+/* Start Gallery CSS */
+.thumb {
+	margin-bottom: 15px;
+}
+.thumb:last-child {
+	margin-bottom: 0;
+}
+/* CSS Image Hover Effects: https://www.nxworld.net/tips/css-image-hover-effects.html */
+.thumb 
+figure img {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  -webkit-transition: .3s ease-in-out;
+  transition: .3s ease-in-out;
+}
+.thumb 
+figure:hover img {
+  -webkit-filter: grayscale(0);
+  filter: grayscale(0);
+}
+.gallarycard {
+    height: 325px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.btn4{  color:#000;  background: #d0d0d0;}
+/*end*/
+img.img-fluid.img-thumbnail {
+    max-width: 131px;
+    height: 80px;
+}
+@media screen and (max-width: 768px) {
+    img.img-fluid.img-thumbnail {
+        max-width: 100%;
+        height: auto;
+    }
+	.m-img-viewer {
+		width: 14.38vw;
+		padding: 10px;
+		border: 1px solid #b2b1b130;
+		border-top-color: #fff;
+	}
+	.d-flex.flex-row.text-center.justify-content-between {
+		justify-content: center !important;
+	}
+	.col-12.col-sm-12.col-md-8.col-lg-8 {
+		margin-left: 0;
+		padding-left: 0;
+	}
+	#model .form-control {
+		margin-top: 10px;
+	}
+	#model label.required1 {
+		max-width: 97.7%;
+	}
+    .gallarycard{    
+        height: auto;
+    }
+}

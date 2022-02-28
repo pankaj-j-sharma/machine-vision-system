@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="login-html">
+   <head>
+      <title>Login</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+   <body class="login-body">
+      <div class="wrapper">
+         <div class="row">
+            <div class="col-12 col-md-12 index1">
+               <ul class="p-0 logoli">
+                  <li class="pull-left">
+                     <a ><img id="logo" class="img-responsive mobile-logo" src="../../../assets/images/login/logo1.png" alt="logo"></a>
+                  </li>
+                  <li class="tatalogo pull-right">
+                     <a ><img src="../../../assets/images/login/tatalogo.png" alt="" /></a>			
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="log row">
+            <div class="dnone  col-md-7 col-lg-7 p-0 ">
+               <img class="panel__image" src="../../../assets/images/login/computer-version-img071.png" alt="" />
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 index2">
+               <div class="form-container">
+                  <div>
+                     <div class="form ">
+                        <form #loginValidate ="ngForm"  (ngSubmit)="validate(loginValidate.value)" class="form__sign-in">
+                        <h2 class="form__title">Welcome to Visimatic</h2>
+                        <div class="form__input-field">
+                           <i class="fa fa-user"></i>
+                           <input id="email" type="text" name="username" placeholder="Username" required ngModel>									
+                        </div>
+                        <div class="form__input-field">
+                           <i class="fa fa-lock"></i>
+                           <input name="password" id="password" type="password" placeholder="Password" required="" ngModel>							
+                        </div>
+                        <input class="form__submit" type="submit" value="Login" />
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row footer">
+            <p class="text-center copyright-text" style="color:white">Copyright © 2021 </p>
+         </div>
+      </div>
+   </body>
+</html>

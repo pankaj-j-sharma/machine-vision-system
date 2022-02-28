@@ -1,0 +1,73 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+    <div class="gear"></div>
+</div>
+<!--loader end-->
+
+<div class="card mycard">
+    <!--<div class="card-header"><i class="fa fa-table"></i> Data Table Example</div>-->
+    <div class="card-header">
+        <div class="two alt-two cchange">
+            <h1 class="heading">
+                <span><i class="fa fa-user-circle-o"></i> Edit Your Profile</span>
+            </h1>
+        </div>
+    </div>
+    <div class="card-body pt-0">
+        <div class="" id="form-create">
+            <div class="content">
+                <div class="content-form">
+                    <div class="form">
+                        <form id="saveUserInfo" #saveUserInfo="ngForm" (ngSubmit)="saveUserData(saveUserInfo.value)">
+
+                            <div class="form-body">
+                                <div class="input-fname">
+                                    <input type="text" [value]="userInfo.FirstName" placeholder="First Name" name="FirstName" ngModel />
+                                </div>
+                                <div class="input-lname">
+                                    <input type="text" [value]="userInfo.LastName" placeholder="Last Name" name="LastName" ngModel/>
+                                </div>
+                                <div class="input-uid">
+                                    <input type="text" [value]="userInfo.UserName" placeholder="User Name" name="UserName" ngModel/>
+                                </div>
+                                <div class="input-uid">
+                                    <input type="password" [value]="userInfo.Password" placeholder="User ID" name="Password" ngModel/>
+                                </div>
+                                <div class="input-org">
+                                    <input type="textarea" [value]="userInfo.Organization" placeholder="Organization" name="Organization" ngModel />
+                                </div>
+                                <div class="input-mail">
+                                    <input type="text" [value]="userInfo.EmailAddress" placeholder="Email address" name="EmailAddress" ngModel />
+                                </div>
+                                <div class="input-number">
+                                    <input type="text" [value]="userInfo.ContactNumber" placeholder="Contact Number" name="ContactNumber" ngModel />
+                                </div>
+                                <input #profilePic [hidden]="true" (change)="onFileChange($event)" accept="image/jpeg" name="profilePic" ngModel type="file" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="content-profile">
+                    <div class="profile-head">
+                        <div class="profile-pic">
+                            <img alt="Paste URL in image field" [src]="userInfo.ImgSrc" />
+                        </div>
+                        <div class="profile-name">
+                            <button type="button" (click)="profilePic.click()" class="btn" for="customFile">Change Profile Picture </button>
+                        </div>
+
+                    </div>
+                    <div class="profile-footer">
+                        <div><i class="fa fa-building-o"></i> {{userInfo.Organization}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="col-md-12 text-center">
+            <button type="button" (click)="navigateBack()" class="btn2"><span><i class="fa fa-times"></i> Cancel</span></button>
+            <button type="submit" form="ngForm" (click)="saveUserInfo.ngSubmit.emit()" class="btn1"><span><i class="fa fa-save"></i> Save</span></button>
+        </div>
+    </div>
+</div>

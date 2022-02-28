@@ -1,0 +1,313 @@
+.dot-elastic {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: #253b52;
+    color: #253b52;
+    animation: dotElastic 1s infinite linear;
+}
+
+.dot-elastic::before,
+.dot-elastic::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+}
+
+.dot-elastic::before {
+    left: -20px;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: #253b52;
+    color: #253b52;
+    animation: dotElasticBefore 1s infinite linear;
+}
+
+.dot-elastic::after {
+    left: 20px;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: #253b52;
+    color: #253b52;
+    animation: dotElasticAfter 1s infinite linear;
+}
+
+@keyframes dotElasticBefore {
+    0% {
+        transform: scale(1, 1);
+    }
+    25% {
+        transform: scale(1, 1.5);
+    }
+    50% {
+        transform: scale(1, 0.67);
+    }
+    75% {
+        transform: scale(1, 1);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes dotElastic {
+    0% {
+        transform: scale(1, 1);
+    }
+    25% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(1, 1.5);
+    }
+    75% {
+        transform: scale(1, 1);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes dotElasticAfter {
+    0% {
+        transform: scale(1, 1);
+    }
+    25% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(1, 0.67);
+    }
+    75% {
+        transform: scale(1, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.bg-conn-icons {
+    width: 20px;
+    height: 20px;
+    background-size: 20px !important;
+    margin-right: 5px;
+    border-radius: 50%;
+    background: url('../../../../assets/images/common/data-connectors/s3.png');
+}
+
+.spinnerWrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    opacity: 0.3;
+    background-color: #eee;
+}
+
+.searchLabel {
+    margin-bottom: 5px;
+    width: 90%;
+    height: 28px !important;
+}
+
+.modal-lg,
+.modal-xl {
+    max-width: 550px;
+}
+
+.optn-main {
+    width: 100%;
+    height: 300px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.optn-main::-webkit-scrollbar {
+    width: .5em;
+}
+
+.optn-main::-webkit-scrollbar-thumb {
+    background-color: #31c2b3;
+    outline: 1px solid #eceded36;
+}
+
+.optn-main::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 2px #aeaeae;
+    box-shadow: inset 0 0 2px #aeaeae;
+}
+
+.searchLabel:focus,
+.searchLabel:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: 1 px solid #ccc !important;
+}
+
+.form-control:focus {
+    border-color: #ccc;
+    box-shadow: inset 0 1px 1px #ccc, 0 0 8px #ddd;
+}
+
+.conn-types-panel {
+    width: 145px;
+    height: 100%;
+    border-right: 1.5px solid #ccc;
+}
+
+.thumb {
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+
+.thumb:last-child {
+    margin-bottom: 0;
+    margin-left: 15px;
+}
+
+.thumb figure img {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+
+.thumb figure:hover img {
+    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
+}
+
+.gallarycard {
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+    border: none;
+}
+
+
+/* Style the tab */
+
+.tab {
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    width: 30%;
+    height: 300px;
+}
+
+.btn1 {
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 0px;
+    text-align: left;
+    color: #253b52;
+    width: 130px;
+    margin: 0px;
+    cursor: inherit;
+}
+
+.lbl1 {
+    padding: 0.3rem 1rem;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 0px;
+    text-align: left;
+    color: #253b52;
+    width: 130px;
+    margin: 0px;
+}
+
+.btn1:hover {
+    background-color: #ddd;
+    transition: .4s;
+}
+
+.btn1-clicked,
+.btn1:active {
+    background-color: #ccc;
+    border: 1px solid #ffffff;
+    transition: .4s;
+}
+
+.btn:focus,
+.btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.btn3 {
+    padding: 0.1rem 0.3rem;
+    border: 2px solid #31c2b3;
+    background-color: #ffffff;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 0px;
+    text-align: left;
+    color: #253b52;
+    width: 80px;
+    margin: 0px;
+    margin-left: 15px;
+    cursor: inherit;
+    text-align: center;
+}
+
+.btn3:hover {
+    font-weight: 600;
+    transition: .4s;
+}
+
+
+/* Style the buttons that are used to open the tab content */
+
+.tab button {
+    display: block;
+    // background-color: inherit;
+    color: black;
+    // padding: 22px 16px;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: left;
+    // cursor: pointer;
+    transition: 0.3s;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    border: none;
+    outline: none;
+    width: 100%;
+    background-color: #ddd;
+}
+
+
+/* Create an active/current "tab button" class */
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    float: left;
+    padding: 0px 1px;
+    border: 1px solid #ccc;
+    width: 70%;
+    border-left: none;
+    height: 300px;
+}
+
+.tablinks {
+    font-size: 1rem;
+    font-weight: 400;
+}

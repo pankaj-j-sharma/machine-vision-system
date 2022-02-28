@@ -1,0 +1,9 @@
+azure-storage-file-datalake
+snowflake-connector-python
+azure-storage-blob
+mysql-connector-python
+cx-Oracle
+pyodbc
+google-cloud-storage
+google-cloud-datastore
+google-cloud-bigquery

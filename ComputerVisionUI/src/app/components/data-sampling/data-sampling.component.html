@@ -1,0 +1,340 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+  <div class="gear"></div> 
+</div>
+<!--loader end-->
+
+<div class="card mb-3" id="imgaug-comp">
+    <div class="card-header">				
+        <div class="two alt-two cchange">
+            <h1 class="heading">
+              <span><i class="fa fa-folder"></i> Data Sampling </span>
+            </h1>
+          </div>
+    </div> 
+    <div class="card-body no-margin-padding">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                <div class="card border-top-0">
+                    <div class="card-body border-0"> 
+                        <div class="row">
+                         <div class="col-12 col-md-6">
+                          <div  class="form-group imgdroparea1">
+                            <div [hidden]="fileList.length>0" draggable="true" ngClass="{{dragAreaClass}}">                              
+                                <div class="col-md-12 text-center pt-4">
+                                   <h6>Drop files here to Upload your data  
+                                    <a style="color:blackgrey" href="javascript:void(0)" (click)="file.click()"> or click to Upload your Images </a></h6> 
+                                    <input type="file" #file [multiple]="true" (change)="onFileChange($event)" style="display:none" />
+                                </div>                               
+                            </div>
+                        <button [hidden]="fileList.length>0"  type="button" (click)="file.click()" class="addimage "><i class="fa fa-picture-o"></i> Upload Image </button>
+                <div class="card" *ngIf="fileList.length>0">                  
+                    <div class="card-body " >
+                        <div  class="card-body imagecount" >
+                            <p>Total {{fileList.length}} images selected</p> 
+                        </div>
+                        </div>
+                        <div class="card-footer no-margin-padding text-center" >				
+                            <button type="submit"  class="btn1"> Remove Data</button>
+                        </div>	
+                    </div> 
+                    </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <form #dataSampling ="ngForm" (ngSubmit)="samplingImages(dataSampling.value)">
+                        <div class="card">
+                                <div class="card-header"> <div class="two alt-two cchange">                               
+                                    <span class="sectitle"><i class="fa fa-cog"></i> Setting Options ( in % )</span>                                  
+                                </div>                             
+                        </div>
+                            <div class="card-body formb">  
+                            <div class="form-group row">
+                              <label for="staticEmail" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">Train Size</label>
+                              <div class="col-6 col-sm-6 col-md-6 col-lg-6 ">
+                                <input type="number" placeholder="70" min="1" max="100" class="form-control" id="trainSize" name="trainSize" [(ngModel)] = "trainPercent">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="inputPassword" class="col-6 col-sm-6 col-md-6 col-lg-6  col-form-label">Test Size</label>
+                              <div class="col-6 col-sm-6 col-md-6 col-lg-6 ">
+                                <input type="number" placeholder="20" min="1" max="100" class="form-control" id="testSize" name="testSize" [(ngModel)] = "testPercent" >
+                                   
+                                 </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-6 col-sm-6 col-md-6 col-lg-6 col-form-label">TValidation Size</label>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 ">
+                                    <input type="number" placeholder="10" min="0" max="100" class="form-control" id="validationSize" name="validationSize" [(ngModel)] = "validationPercent" >
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="card-footer no-margin-padding text-center" >				
+                                <button type="submit"  class="btn2"> Split Data</button>
+                            </div>	
+                            </div>
+                          </form>
+                        
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class=" table-responsive col-12 col-md-12 pt-3">
+                        <table class="table table-hover" width="100%" cellspacing="0" id="datasamp">
+                            <thead class="mdb-color darken-3">
+                            <tr> 
+                                <th>No.</th>
+                                <th>Folder</th>
+                                <th>Records</th>
+                                <th>Size</th>
+                                <th>Updated On</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Train</td>
+                                <td>700</td>
+                                <td>80 MB</td>
+                                <td>10 Sept 2021</td>                         
+                                <td><span title="Delete"><i class="fa fa-trash"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Test</td>
+                                <td>200</td>
+                                <td>60 MB</td>
+                                <td>10 Sept 2021</td>                         
+                                <td><span title="Delete"><i class="fa fa-trash"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Validation</td>
+                                <td>100</td>
+                                <td>12 MB</td>
+                                <td>10 Sept 2021</td>                                
+                                <td><span title="Delete"><i class="fa fa-trash"></i></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                 </div>
+                  </div>
+                </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                <div class="card border-top-0">
+                    <div class="card-header"> <div class="two alt-two cchange">                               
+                        <span class="sectitle"><i class="fa fa-file-zip-o"></i> Splitted Data</span>                                  
+                    </div>                             
+                 </div>
+                        <div class="card-body " >
+                            <div  class="list-group">
+                                <div class="list-group-item list-group-item-action d-flex justify-content-between"   type="button" data-toggle="modal" data-target='#trainImagesPreview'>
+                                    <div>
+                                        <p>Train Folder</p>
+                                        <p>{{trainCount}} files </p>
+                                    </div>
+                                    <i class="fa fa-folder-open fa-5x"></i>
+                                </div>
+                                <div class="list-group-item list-group-item-action d-flex justify-content-between" type="button" data-toggle="modal" data-target='#testImagesPreview'>
+                                    <div>
+                                        <p>Test Folder</p>
+                                        <p>{{testCount}} files </p>
+                                    </div>
+                                    <i class="fa fa-folder-open fa-5x"></i>
+                                </div>
+                                <div class="list-group-item list-group-item-action d-flex justify-content-between" type="button" data-toggle="modal" data-target='#ValidtnImagesPreview'>
+                                    <div>
+                                        <p>Validation Folder</p>
+                                        <p>{{validationCount}} files </p>
+                                    </div>
+                                    <i class="fa fa-folder-open fa-5x"></i>
+                                </div>
+                            </div>                
+                        </div>
+                        <div class="card-footer no-margin-padding text-center" >
+                            <button type="button" (click)="exportSampledImages($event)"  class="btn1"><span><i class="fa fa-file-zip-o"></i> Export</span></button>
+                        </div>	
+                    </div>    
+                       
+                        </div>
+    </div>
+
+</div>
+</div>
+<!--pankag code Start
+<div class="card mb-3 container-card">
+    <div class="card-header">				
+        <div class="two alt-two cchange">
+            <h1 class="heading">
+                <span><i class="fa fa-image"></i> Data Sampling</span>
+            </h1>
+        </div>
+    </div>
+    <div class="card-body no-margin-padding">
+        <div class="d-flex justify-content-between">
+
+            <div class="card no-margin-padding" style="width:80%; height:max-content;">
+                <div class="card-body no-margin-padding" >
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="form-group" style="margin:0px;padding:0px;height:70px;width:300px">
+                                <div draggable="true" ngClass="{{dragAreaClass}}">
+                                    <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        Drop files here to Upload your data        
+                                        <a style="color:blackgrey" href="javascript:void(0)" (click)="file.click()"> or click to Upload your Images </a>
+                                        <input type="file" #file [multiple]="true" (change)="onFileChange($event)" style="display:none" />
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="fileList.length>0" class="card-body bg-success" style="padding:2px;margin:1px;width:300px">
+                                <p class="card-text text-white">Total {{fileList.length}} images selected</p>                        
+                            </div>
+                        </div>
+                        <div class="card-footer no-margin-padding">				
+                            <button type="button" (click)="$event.preventDefault()"  class="btn1"><span><i class="fa fa-save"></i> Export</span></button>
+                        </div>	
+                    </div>
+
+                    <form #dataSampling ="ngForm" (ngSubmit)="samplingImages(dataSampling.value)">
+                    <div class="card">
+                        <div class="card-header">Setting Options ( in % )</div>
+                        <div class="card-body no-margin-padding">
+
+                            <div class="d-flex justify-content-between">
+                            <div class="input-group mb-3 input-group-sm">
+                                <div class="input-group-prepend" style="margin-right:10px;">
+                                <span class="input-group-text"><label>Train Size</label></span>
+                                </div>
+                                <input type="number" placeholder="70" min="1" max="100" class="form-control" id="trainSize" name="trainSize" [(ngModel)] = "trainPercent">
+                            </div>
+
+                            <div class="input-group mb-3 input-group-sm">
+                                <div class="input-group-prepend" style="margin-right:10px;">
+                                <span class="input-group-text"><label>Test Size</label></span>
+                                </div>
+                                <input type="number" placeholder="20" min="1" max="100" class="form-control" id="testSize" name="testSize" [(ngModel)] = "testPercent" >
+                            </div>
+
+                            <div class="input-group mb-3 input-group-sm">
+                                <div class="input-group-prepend" style="margin-right:10px;">
+                                <span class="input-group-text"><label>Validation Size</label></span>
+                                </div>
+                                <input type="number" placeholder="10" min="0" max="100" class="form-control" id="validationSize" name="validationSize" [(ngModel)] = "validationPercent" >
+                            </div>
+
+                            <div class="card-footer no-margin-padding" style="margin:0px;padding:0px;">				
+                                <button type="submit"  class="btn1" style="margin:0px; margin-right:5px;"><span style="padding: 3px 15px 3px 15px;"> Split</span></button>
+                            </div>	
+                            </div>
+
+                        </div>
+                    </div>    
+                    </form>
+
+                    <div class="card no-margin-padding">
+                        <div class="card-body no-margin-padding">
+                            <div style="width:max-content; height:15px;"></div>
+                            <div class="d-flex justify-content-end">
+                            <input type="text" placeholder="Search.." class="form-control" style="margin-right:6px; margin-bottom:6px;" >
+                            </div>
+
+                        <div class="container no-margin-padding" >
+                        <table class="table table-bordered table-sm">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>No.</th>
+                                <th>Folder</th>
+                                <th>Records</th>
+                                <th>Size</th>
+                                <th>Updated On</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Train</td>
+                                <td>700</td>
+                                <td>80 MB</td>
+                                <td>10 Sept 2021</td>
+                                <td><span><i class="fa fa-close"></i> Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Test</td>
+                                <td>200</td>
+                                <td>60 MB</td>
+                                <td>10 Sept 2021</td>
+                                <td><span><i class="fa fa-close"></i> Delete</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Validation</td>
+                                <td>100</td>
+                                <td>12 MB</td>
+                                <td>10 Sept 2021</td>
+                                <td><span><i class="fa fa-close"></i> Delete</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>    
+            <div class="card" style="width:20%; height:max-content;">
+                <div class="card-body no-margin-padding" >
+                    <div  class="list-group">
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between"   type="button" data-toggle="modal" data-target='#trainImagesPreview'>
+                            <div>
+                                <p>Train Folder</p>
+                                <p>{{trainCount}} files </p>
+                            </div>
+                            <i class="fa fa-folder fa-5x"></i>
+                        </div>
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between" type="button" data-toggle="modal" data-target='#testImagesPreview'>
+                            <div>
+                                <p>Test Folder</p>
+                                <p>{{testCount}} files </p>
+                            </div>
+                            <i class="fa fa-folder fa-5x"></i>
+                        </div>
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between" type="button" data-toggle="modal" data-target='#ValidtnImagesPreview'>
+                            <div>
+                                <p>Validation Folder</p>
+                                <p>{{validationCount}} files </p>
+                            </div>
+                            <i class="fa fa-folder fa-5x"></i>
+                        </div>
+                    </div>                
+                </div>
+            </div>    
+        </div>
+    </div>
+
+</div>    
+-->
+<app-modal-popup
+    *ngIf="trainCount>0"
+    modalId='trainImagesPreview'
+    [imgFileList]="trainImgs"
+    >
+</app-modal-popup>
+
+<app-modal-popup
+    *ngIf="testCount>0"
+    modalId='testImagesPreview'
+    [imgFileList]="testImgs"
+    >
+</app-modal-popup>
+
+<app-modal-popup
+    *ngIf="validationCount>0"
+    modalId='validtnImagesPreview'
+    [imgFileList]="validationImgs"
+    >
+</app-modal-popup>

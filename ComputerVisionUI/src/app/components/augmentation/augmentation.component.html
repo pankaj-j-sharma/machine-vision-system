@@ -1,0 +1,195 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+    <div class="gear"></div>
+</div>
+<!--loader end-->
+
+<!-- Small modal -->
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header border-0 p-0 m-0 justify-content-center text-center">
+                <div class="two alt-two">
+                    <h1 class="heading">
+                        <span>Save Dataset</span>
+                    </h1>
+                </div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="lblset1" #saveCustomLbl="ngForm" (ngSubmit)="saveAs(saveCustomLbl.value)">
+                    <div class="form-group">
+                        <label for="saveAsLabel" class="col-form-label" style="background-color: transparent;border: transparent; font-size: inherit;">Resource Name:</label>
+                        <input type="text" class="form-control" id="saveAsLabel" name="saveAsLabel" ngModel>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 p-0 m-0 justify-content-center text-center">
+                <button type="submit" form="ngForm" (click)="saveCustomLbl.ngSubmit.emit()" class="btn1 bt"><span><i class="fa fa-save"></i> Save</span></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--end model-->
+
+
+<div class="card mb-3" id="imgaug-comp">
+    <div class="card-header">
+        <div class="two alt-two cchange">
+            <h1 class="heading">
+                <span><i class="fa fa-picture-o"></i> Image Augmentation Toolkit </span>
+            </h1>
+        </div>
+    </div>
+    <div class="card-body p-1">
+
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-4">
+                <div class="card p-0">
+                    <div class="card-body p-0 border-0">
+                        <div class="form-group droparea1" *ngIf="fileList.length==0">
+                            <div draggable="true" ngClass="{{dragAreaClass}}">
+                                <h6>Drop files here to Upload your data</h6>
+                                <!--<a style="color:blackgrey" href="javascript:void(0)" (click)="file.click()"> or click to Upload your Images </a>-->
+                                <input type="file" #file [multiple]="true" (change)="onFileChange($event)" style="display: none;" />
+                            </div>
+                            <button type="button" (click)="file.click()" class="addimage"><i class="fa fa-picture-o"></i> Upload Image</button>
+                        </div>
+                        <div *ngIf="fileList.length>0" class="card-body imagecount">
+                            <p>Total {{fileList.length}} images selected</p>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="two alt-two cchange">
+                                    <span class="sectitle"><i class="fa fa-cog"></i> Setting Options </span>
+                                </div>
+                            </div>
+                            <div class="no-margin-padding">
+                                <form id="imgsetting" #imageAugmentation="ngForm" (ngSubmit)="augmentImage(imageAugmentation.value)" class="formb pb-0">
+                                    <div [hidden]="true" class="form-group row">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">No. of Samples</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <input type="number" value=1000 class="form-control" name="samples" ngModel />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">Resources</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <select class="form-select form-control" name="resource" (change)="selectImageResource($event)" ngModel>
+                                                <option value="" selected>Create Image Resource</option>
+                                                <option value="{{resource.id}}" *ngFor="let resource of allResources">{{resource.Name}}</option>                            
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">Re-scaling size</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <select class="form-select form-control" name="rescale" ngModel>
+                                                <option value="" disabled selected hidden>Select Re-scaling Option</option>
+                                                <option value="150*150" (click)="rescalingOption='150*150' ; $event.preventDefault();">150*150</option>
+                                                <option value="100*100" (click)="rescalingOption='100*100' ; $event.preventDefault();">100*100</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">Flip</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <select class="form-select form-control" name="flip" ngModel>
+                                                <option value="" disabled selected hidden>Select Flip Option</option>
+                                                <option value="Horizontal" (click)="flipOption='Horizontal' ; $event.preventDefault();">Horizontal</option>
+                                                <option value="Vertical" (click)="flipOption='Vertical' ; $event.preventDefault();">Vertical</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">Translation</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <select class="form-select form-control" name="translation" ngModel>
+                                                <option value="" disabled selected hidden>Select Translation Option</option>
+                                                <option value="350*350" (click)="translationOption='350*350' ; $event.preventDefault();">350*350</option>
+                                                <option value="200*200" (click)="translationOption='200*200' ; $event.preventDefault();">200*200</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">Rotation</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <select class="form-select form-control" name="rotation" ngModel>
+                                                <option value="" disabled selected hidden>Select Rotation Option</option>
+                                                <option value="90-Degree" (click)="rotationOption='90-Degree' ; $event.preventDefault();">90-Degree</option>
+                                                <option value="45-Degree" (click)="rotationOption='45-Degree' ; $event.preventDefault();">45-Degree</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row pb-0">
+                                        <label for="staticEmail" class="col-4 col-sm-4 col-md-4 col-lg-4 col-form-label">Shearing</label>
+                                        <div class="col-8 col-sm-8 col-md-8 col-lg-8">
+                                            <select class="form-select form-control" name="shearing" ngModel>
+                                                <option value="" disabled selected hidden>Select Shearing Option</option>
+                                                <option value="Yes" (click)="shearingOption='Yes' ; $event.preventDefault();">Yes</option>
+                                                <option value="No" (click)="shearingOption='No' ; $event.preventDefault();">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center p-1">
+                                <button type="button" form="ngForm" (click)="imageAugmentation.ngSubmit.emit()" class="btn1">
+                                    <span><i class="fa fa-tasks"></i> Run</span>
+                                </button>
+                                <button type="button" (click)="removeUpload()" class="btn2">
+                                    <span><i class="fa fa-times"></i> Cancel</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 text-center">
+                <div class="card-body imgsec no-margin-padding">
+                    <img *ngIf="loadedImgUrl==''" alt="Placeholder" class="img-fluid img-viewer" src="assets/images/placeholder.jpg" />
+                    <img *ngIf="loadedImgUrl!=''" src="{{loadedImgUrl}}" class="img-fluid img-viewer" />
+                </div>
+                <div class="card-body no-margin-padding">
+                    <img *ngIf="loadedImgUrl=='' && augmentedFiles.length==0" alt="Placeholder" class="img-fluid m-img-viewer" src="assets/images/placeholder.jpg" />
+                    <img *ngIf="loadedImgUrl=='' && augmentedFiles.length==0" alt="Placeholder" class="img-fluid m-img-viewer" src="assets/images/placeholder.jpg" />
+                    <img *ngIf="loadedImgUrl=='' && augmentedFiles.length==0" alt="Placeholder" class="img-fluid m-img-viewer" src="assets/images/placeholder.jpg" />
+                    <img *ngIf="loadedImgUrl=='' && augmentedFiles.length==0" alt="Placeholder" class="img-fluid m-img-viewer" src="assets/images/placeholder.jpg" />
+                    <img *ngIf="loadedImgUrl=='' && augmentedFiles.length==0" alt="Placeholder" class="img-fluid m-img-viewer" src="assets/images/placeholder.jpg" />
+                    <img *ngIf="loadedImgUrl=='' && augmentedFiles.length==0" alt="Placeholder" class="img-fluid m-img-viewer" src="assets/images/placeholder.jpg" />
+
+                    <img *ngFor="let augFile of augmentedFiles" (click)="selectPreviewOptn(augFile.no)" src="{{augFile.url}}" data-tooltip="I’m the tooltip text." title="{{augFile.name}}" class="{{augFile.imgClass}} img-fluid m-img-viewer imgtooltip" />
+                </div>
+
+                <div *ngIf="augmentedFiles.length>0" class="card-footer no-margin-padding">
+                    <div class="d-flex flex-row text-center justify-content-between">
+                        <button type="button" (click)="loadSaveAsModal()" class="btn1">
+                            <span><i class="fa fa-save"></i> Save</span>
+                        </button>
+                        <button type="button" (click)="removeUpload()" class="btn2">
+                            <span><i class="fa fa-undo"></i> Clear</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-lg-2 border-left">
+                <div class="card-header">
+                    <div class="two alt-two cchange">
+                        <span class="sectitle"><i class="fa fa-list"></i> Image List</span>
+                    </div>
+                </div>
+
+                <div class="card-body no-margin-padding imagelist">
+                    <ul>
+                        <li *ngFor="let file of fileListAug ; let i=index ;" class="">
+                            <a href="" (click)="onselectionChange($event,file.no)" title="{{file.name}}" [ngClass]="{'selected': defaultSelection === i}">{{file.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

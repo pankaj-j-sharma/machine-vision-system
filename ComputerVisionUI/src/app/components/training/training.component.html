@@ -1,0 +1,133 @@
+<!--loader start-->
+<div *ngIf="processing" class="loading">
+  <div class="gear"></div> 
+</div>
+<!--loader end-->
+<div class="card mb-3">
+    <div class="card-header">	
+            <div class="two alt-two cchange">
+                <h1 class="heading">
+                    <span><i class="fa"></i> Model Training </span>
+                </h1>
+            </div>
+          
+    </div>
+    <div class="card-header border-0 btncls">	
+        <button [hidden]="trainingType==''" type="submit" form="ngForm" (click)="customTrainForm.ngSubmit.emit()" class="btn1 pull-right"><span><i class="fa fa-hourglass-start"></i> Start Training</span></button>              
+    </div>
+    <div class="card-body">  
+                <!--<div class="row btnrow">                   
+                    <button type="button" (click)="startTraining()"  class="btn1"><span><i class="fa fa-hourglass-start"></i> Start Training</span></button>
+                </div> -->             
+                <div class="card-header border-0">    
+                    <form #customTrainForm="ngForm" (ngSubmit)="startTraining(customTrainForm.value)" class="col-12 col-md-12 row p-0 m-0"> 
+                        <div class="form-group col-12 col-md-2">
+                            <label for="epoch" class=" ">Model Name</label>
+                            <input type="text" placeholder="" class="form-control"  id="modelname" maxlength=17 name="modelname" [(ngModel)]="modelFileLabel">                   
+                        </div> 
+                        <div class="form-group col-12 col-md-2">
+                            <label for="problemtype" class="">Problem Type</label>                                                            
+                                <select [disabled]="modelFileLabel==''" class="form-select form-control"  id="problemtype" name="problemtype" (change)="changeTrainType($event)" [(ngModel)]="trainingType">
+                                    <option value="" disabled selected hidden>Select Problem Type</option>        
+                                    <option>Classification</option>
+                                    <option>Object Detection</option>
+                                </select>
+                        </div>    
+
+                        <div [hidden]="!renderFormOptions" class="form-group col-12 col-md-2">
+                                <label for="epoch" class=" ">Epoch</label>
+                                <input type="number" placeholder="1000" class="form-control"  id="epoch" name="epoch" ngModel>                   
+                        </div>  
+                        <div [hidden]="!renderFormOptions" class="form-group col-12 col-md-2">
+                            <label for="learningrate" class=" ">Optimizer</label>
+                            <select class="form-select form-control"  id="problemtype" name="optimizer" ngModel>
+                                <option value="" disabled selected hidden>Select optimizer Type</option>        
+                                <option *ngFor="let fn of optimizerOptns" value="{{fn.value}}">{{fn.option}}</option>
+                            </select>
+                                                          
+                              <input [hidden]="true" type="number" placeholder="0.01" class="form-control"  id="learningrate" name="learningrate" ngModel>
+                          
+                        </div>  
+                        <div [hidden]="!renderFormOptions" class="form-group col-12 col-md-2">
+                            <label for="activation" class="">Activation</label>
+                                                          
+                                <select class="form-select form-control"  id="activation" name="activation" ngModel>
+                                    <option value="" disabled selected hidden>Select Activation Option</option>                                  
+                                    <option *ngFor="let fn of activationFns" value="{{fn.value}}">{{fn.option}}</option>
+                                </select>                                  
+                         
+                        </div>
+                        <div [hidden]="trainingType!='Classification' || !renderFormOptions" class="form-group col-12 col-md-2">
+                            <label for="regularization" class="">Loss Parameter</label>
+                                                          
+                                <select class="form-select form-control"  id="lossparam" name="lossparam" ngModel>
+                                    <option value="" disabled selected hidden>Select Regularization Option</option>                                  
+                                    <option *ngFor="let fn of lossParameterOptns" value="{{fn.value}}">{{fn.option}}</option>
+                                </select>  
+                        </div>
+
+                        <div [hidden]="trainingType!='Object Detection' || !renderFormOptions" class="form-group col-12 col-md-2">
+                            <label for="regularization" class="">Pretrained Models</label>
+                                                          
+                                <select class="form-select form-control"  id="detectiontype" name="objectDetectionType" ngModel>
+                                    <option value="" disabled selected hidden>Select Model Type</option>        
+                                    <option value="yolov5">Yolo version 5</option>
+                                    <option value="tensorflow">Tensorflow API</option>
+                                    
+                                </select>  
+                        </div>
+                    </form>                                    
+                        <div class="row brow">
+                            <div class="col-md-4 card border-0 no-margin-padding">
+                                <div class="note" id="logOutput">
+                                 <p>{{trainingLogs}} 
+                                 </p>
+                                </div>
+                             </div>
+                            <div class="col-md-2 card border-0 ">    
+                                       <app-file-upload (onFilesDropped)="filesAdded($event)"></app-file-upload>    
+                            </div>
+                            <div class="col-md-2 card cat">
+                                <div class="form-group">
+                                    <input type="text" [(ngModel)]="newCategory" (keydown.enter)="addCategory($event);false" placeholder="" class="form-control" style="width: 100% !important;" id="category" >
+                                </div>        
+                                <div *ngFor="let item of categoryItems" class="chip">
+                                {{item.name}}
+                                <span class="closebtn" (click)="removeCategory(item.id)" ><i class="fa fa-times"></i></span>
+                                </div>        
+                            </div>
+                           
+                            <div class="col-md-4 card chart">
+                                <div class="card-body">
+                                    <img [hidden]="true" src="../../../assets/images/common/chart.jpg" alt="" style="width: 108%;"/></div> 
+                                    <div class=" chart-area">
+                                        <canvas id="trainResultChart"> </canvas>
+                                    </div>                              
+                            </div>
+                        </div>       
+                </div>    
+
+            <!--model start-->
+            <div class="modal fade" id="roleModal">
+                <div class="modal-dialog" style="max-width:460;left:20; top: 120;">
+                   <div class="modal-content">
+                      <div class="modal-body pt-0">
+                         <div class="row justify-content-center mt-0 pt-0 pb-4">
+                            <div class="two alt-two">
+                               <h1 class="heading">
+                                  <span>Success </span>
+                               </h1>
+                            </div>
+                         </div>
+                         <div class="row">
+                            <div class="col-12 col-md-12 col-sm-12">
+                                <h3 class="product-title"><a type="button" (click)="navigateToPrediction()"><p [innerHTML]="trainSuccessMessage"></p></a></h3>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+             <!--model end-->            
+                 
+</div>
